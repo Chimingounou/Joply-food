@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-<noscript><style>.rv,.rv-z{opacity:1!important;transform:none!important;}.cascade>*{opacity:1!important;transform:none!important;}</style></noscript>
+<noscript><style>.rv,.rv-z,.cascade>*{opacity:1!important;transform:none!important;}</style></noscript>
 
 <script>
 window.currentLang='fr';
@@ -22,7 +22,6 @@ window.setLang=function(lang){
 };
 window.toggleMenu=function(){ try{ var n=document.getElementById('navLinks'); if(n) n.classList.toggle('active'); }catch(e){} };
 window.handleSubmit=function(e){ try{ e.preventDefault(); alert(window.currentLang==='fr'?'Merci ! Votre commande a bien été envoyée. Nous vous recontacterons sous 24h pour convenir du menu et du tarif.':'Thank you! Your order has been sent. We will contact you within 24h to agree on the menu and price.'); e.target.reset(); }catch(err){} };
-window.addEventListener('load',function(){ setTimeout(function(){ if(!window.__revealOK){ document.documentElement.classList.add('reveal-fallback'); } },800); });
 </script>
 
 <style>
@@ -69,7 +68,6 @@ nav.scrolled{ background:rgba(0,0,0,.55); backdrop-filter:blur(14px); -webkit-ba
 .btn-glass.accent{ background:rgba(181,101,29,.22); border-color:rgba(181,101,29,.55); color:var(--accent-2); }
 .btn-glass.accent:hover{ background:var(--accent); color:#fff; }
 
-/* HERO carte : 5 images plein écran + zoom */
 .carte-top{ position:relative; overflow:hidden; background:#000; }
 .carte-bg-carousel{ --dur:5s; position:absolute; inset:0; z-index:0; }
 .carte-bg-carousel .carousel-slide{ object-fit:cover; }
@@ -86,12 +84,12 @@ section{ padding:var(--gap-y) 0; }
 .white-section{ background:#fff; }
 .white-section .section-title{ color:#1a1a1a; }
 
-/* === GRILLE VERTICALE (1 col mobile / 2 tablette / 3 desktop) — plus d'escalier, plus de scroll horizontal === */
+/* grille verticale : 1 col mobile / 2 tablette / 3 desktop */
 .stair-track{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));
   gap:clamp(1.4rem,3vw,2.2rem);
-  align-items:start;                 /* hauteurs naturelles => rythme vertical, pas de vignettes identiques */
+  align-items:start;
   padding:1rem var(--pad-x) clamp(2rem,5vw,4rem);
   max-width:1300px;
   margin:0 auto;
@@ -147,15 +145,13 @@ footer a.back-home{ color:var(--accent); text-decoration:none; font-weight:800; 
 .carousel-slide.active{ opacity:1; animation:kenburns var(--dur,6s) ease-out forwards; }
 @keyframes kenburns{ from{transform:scale(1);} to{transform:scale(1.08);} }
 
-.rv,.rv-z{ opacity:0; transition:opacity .9s cubic-bezier(.22,.61,.36,1),transform .9s cubic-bezier(.22,.61,.36,1); }
-.rv{ transform:translateY(55px); } .rv-z{ transform:scale(.82); }
+/* animations : carte par carte, infaillible sur mobile */
+.rv,.rv-z{ opacity:0; transition:opacity .8s cubic-bezier(.22,.61,.36,1),transform .8s cubic-bezier(.22,.61,.36,1); }
+.rv{ transform:translateY(45px); } .rv-z{ transform:scale(.9); }
 .rv.in,.rv-z.in{ opacity:1; transform:none; }
-.cascade > *{ opacity:0; transform:translateY(50px); }
-.cascade.in > *{ animation:cascadeIn .7s cubic-bezier(.22,.61,.36,1) both; }
-@keyframes cascadeIn{ from{opacity:0;transform:translateY(50px);} to{opacity:1;transform:none;} }
-.cascade.in > *:nth-child(1){animation-delay:.05s}.cascade.in > *:nth-child(2){animation-delay:.1s}.cascade.in > *:nth-child(3){animation-delay:.15s}.cascade.in > *:nth-child(4){animation-delay:.2s}.cascade.in > *:nth-child(5){animation-delay:.25s}.cascade.in > *:nth-child(6){animation-delay:.3s}.cascade.in > *:nth-child(7){animation-delay:.35s}.cascade.in > *:nth-child(8){animation-delay:.4s}.cascade.in > *:nth-child(9){animation-delay:.45s}
-.reveal-fallback .rv,.reveal-fallback .rv-z{ opacity:1!important; transform:none!important; }
-.reveal-fallback .cascade > *{ opacity:1!important; transform:none!important; }
+.cascade > *{ opacity:0; transform:translateY(40px); transition:opacity .7s ease,transform .7s ease; }
+.cascade > *.in{ opacity:1; transform:none; }
+.reveal-fallback .rv,.reveal-fallback .rv-z,.reveal-fallback .cascade > *{ opacity:1!important; transform:none!important; }
 
 @media (max-width:968px){
   .nav-links{ display:none; position:absolute; top:100%; left:0; width:100%; background:rgba(5,5,5,.97); flex-direction:column; padding:1.5rem var(--pad-x); gap:1.3rem; border-top:1px solid var(--border); }
@@ -312,11 +308,16 @@ footer a.back-home{ color:var(--accent); text-decoration:none; font-weight:800; 
 
     document.querySelectorAll('a[href^="#"]').forEach(function(a){ a.addEventListener('click',function(e){ var id=this.getAttribute('href'); if(!id||id.length<2)return; var t=document.querySelector(id); if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); var nl=document.getElementById('navLinks'); if(nl) nl.classList.remove('active'); } }); });
 
+    var revealed=0;
+    function reveal(el){ if(el && !el.classList.contains('in')){ el.classList.add('in'); revealed++; } }
+    var animEls=document.querySelectorAll('.rv,.rv-z,.cascade > *');
+
     try{
       if('IntersectionObserver' in window){
-        var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
-        document.querySelectorAll('.rv,.rv-z,.cascade').forEach(function(el){ io.observe(el); });
-        window.__revealOK=true;
+        var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ reveal(e.target); io.unobserve(e.target); } }); },{threshold:0, rootMargin:'0px 0px -5% 0px'});
+        animEls.forEach(function(el){ io.observe(el); });
+        setTimeout(function(){ var vh=window.innerHeight||document.documentElement.clientHeight; animEls.forEach(function(el){ var r=el.getBoundingClientRect(); if(r.top<vh && r.bottom>0) reveal(el); }); },120);
+        setTimeout(function(){ if(revealed===0) revealAll(); },3000);
       }else{ revealAll(); }
     }catch(e){ revealAll(); }
   }
