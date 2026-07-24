@@ -8,10 +8,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-<!-- SI LE JAVASCRIPT EST COUPÉ : on force tout le texte visible -->
-<noscript><style>.rv,.rv-l,.rv-r,.rv-z{opacity:1!important;transform:none!important;}.cascade>*{opacity:1!important;transform:none!important;}</style></noscript>
+<noscript><style>.rv,.rv-l,.rv-r,.rv-z,.cascade>*{opacity:1!important;transform:none!important;}</style></noscript>
 
-<!-- SCRIPT CRITIQUE : fonctions vitales + parachute (toujours exécuté, indépendant du reste) -->
 <script>
 window.currentLang='fr';
 window.setLang=function(lang){
@@ -24,9 +22,6 @@ window.setLang=function(lang){
 };
 window.toggleMenu=function(){ try{ var n=document.getElementById('navLinks'); if(n) n.classList.toggle('active'); }catch(e){} };
 window.selectQty=function(b){ try{ document.querySelectorAll('.qty-btn').forEach(function(x){x.classList.remove('active');}); if(b) b.classList.add('active'); }catch(e){} };
-window.handleSubmit=function(e){ try{ e.preventDefault(); alert(window.currentLang==='fr'?'Merci pour votre demande ! Nous vous recontacterons sous 24h.':'Thank you for your request! We will contact you within 24h.'); e.target.reset(); document.querySelectorAll('.qty-btn').forEach(function(x){x.classList.remove('active');}); }catch(err){} };
-/* PARACHUTE : si l'animation de scroll n'a pas démarré, on révèle tout le texte */
-window.addEventListener('load',function(){ setTimeout(function(){ if(!window.__revealOK){ document.documentElement.classList.add('reveal-fallback'); } },800); });
 </script>
 
 <style>
@@ -35,7 +30,7 @@ html{ overflow-x:hidden; scroll-behavior:smooth; -webkit-text-size-adjust:100%; 
 :root{
   --bg:#050505; --text:#fff; --muted:#b8b8b8;
   --accent:#b5651d; --accent-2:#d99a5b; --accent-d:#8a4a12;
-  --border:rgba(255,255,255,.1);
+  --border:rgba(255,255,255,.1); --wa:#25D366;
   --head:'Playfair Display',serif; --body:'Inter',sans-serif;
   --fs-hero:clamp(2.6rem,11vw,7rem);
   --fs-h2:clamp(1.9rem,5.5vw,3.4rem);
@@ -156,30 +151,30 @@ footer{ background:#020202; padding:clamp(3rem,7vw,5rem) var(--pad-x) 2rem; bord
 .footer-column h4{ font-family:var(--head); font-size:clamp(1.05rem,3vw,1.2rem); margin-bottom:1.5rem; color:#fff; font-weight:900; }
 .footer-column ul{ list-style:none; }
 .footer-column ul li{ margin-bottom:.8rem; }
-.footer-column ul li a{ color:#777; text-decoration:none; transition:color .3s; font-size:var(--fs-small); font-weight:700; }
+.footer-column ul li a{ color:#999; text-decoration:none; transition:color .3s; font-size:var(--fs-small); font-weight:700; word-break:break-word; }
 .footer-column ul li a:hover{ color:var(--accent); }
 .footer-bottom{ text-align:center; padding-top:2rem; border-top:1px solid rgba(255,255,255,.05); color:#555; font-size:var(--fs-small); font-weight:700; }
 
+/* bouton WhatsApp flottant (conservé) */
 .to-top{ position:fixed; right:clamp(1rem,3vw,2rem); bottom:clamp(1rem,3vw,2rem); width:48px; height:48px; border-radius:50%; border:1px solid rgba(181,101,29,.6); background:rgba(181,101,29,.85); color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:1050; opacity:0; visibility:hidden; transform:translateY(20px); transition:all .4s; box-shadow:0 8px 24px rgba(0,0,0,.4); }
 .to-top.show{ opacity:1; visibility:visible; transform:none; }
 .to-top:hover{ background:var(--accent); transform:translateY(-3px); }
 .to-top svg{ width:22px; height:22px; stroke:#fff; fill:none; stroke-width:2.4; }
+.wa-float{ position:fixed; left:clamp(1rem,3vw,2rem); bottom:clamp(1rem,3vw,2rem); width:56px; height:56px; border-radius:50%; background:var(--wa); display:flex; align-items:center; justify-content:center; z-index:1050; box-shadow:0 8px 24px rgba(0,0,0,.35); transition:transform .3s; text-decoration:none; animation:waPulse 2.6s infinite; }
+.wa-float:hover{ transform:translateY(-3px) scale(1.06); }
+.wa-float svg{ width:30px; height:30px; fill:#fff; }
+@keyframes waPulse{ 0%{box-shadow:0 0 0 0 rgba(37,211,102,.5);} 70%{box-shadow:0 0 0 16px rgba(37,211,102,0);} 100%{box-shadow:0 0 0 0 rgba(37,211,102,0);} }
 
 .carousel-slide{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transform:scale(1.12); transition:opacity 1s ease-in-out; }
 .carousel-slide.active{ opacity:1; animation:kenburns var(--dur,6s) ease-out forwards; }
 @keyframes kenburns{ from{transform:scale(1);} to{transform:scale(1.08);} }
 
-/* animations de scroll */
-.rv,.rv-l,.rv-r,.rv-z{ opacity:0; transition:opacity .9s cubic-bezier(.22,.61,.36,1),transform .9s cubic-bezier(.22,.61,.36,1); }
-.rv{ transform:translateY(55px); } .rv-l{ transform:translateX(-80px); } .rv-r{ transform:translateX(80px); } .rv-z{ transform:scale(.82); }
+.rv,.rv-l,.rv-r,.rv-z{ opacity:0; transition:opacity .8s cubic-bezier(.22,.61,.36,1),transform .8s cubic-bezier(.22,.61,.36,1); }
+.rv{ transform:translateY(45px); } .rv-l{ transform:translateX(-60px); } .rv-r{ transform:translateX(60px); } .rv-z{ transform:scale(.9); }
 .rv.in,.rv-l.in,.rv-r.in,.rv-z.in{ opacity:1; transform:none; }
-.cascade > *{ opacity:0; transform:translateY(50px); }
-.cascade.in > *{ animation:cascadeIn .7s cubic-bezier(.22,.61,.36,1) both; }
-@keyframes cascadeIn{ from{opacity:0;transform:translateY(50px);} to{opacity:1;transform:none;} }
-.cascade.in > *:nth-child(1){animation-delay:.05s}.cascade.in > *:nth-child(2){animation-delay:.11s}.cascade.in > *:nth-child(3){animation-delay:.17s}.cascade.in > *:nth-child(4){animation-delay:.23s}.cascade.in > *:nth-child(5){animation-delay:.29s}.cascade.in > *:nth-child(6){animation-delay:.35s}.cascade.in > *:nth-child(7){animation-delay:.41s}.cascade.in > *:nth-child(8){animation-delay:.47s}.cascade.in > *:nth-child(9){animation-delay:.53s}
-/* FILET DE SÉCURITÉ : si l'animation ne part pas, on force le texte visible */
-.reveal-fallback .rv,.reveal-fallback .rv-l,.reveal-fallback .rv-r,.reveal-fallback .rv-z{ opacity:1!important; transform:none!important; }
-.reveal-fallback .cascade > *{ opacity:1!important; transform:none!important; }
+.cascade > *{ opacity:0; transform:translateY(40px); transition:opacity .7s ease,transform .7s ease; }
+.cascade > *.in{ opacity:1; transform:none; }
+.reveal-fallback .rv,.reveal-fallback .rv-l,.reveal-fallback .rv-r,.reveal-fallback .rv-z,.reveal-fallback .cascade > *{ opacity:1!important; transform:none!important; }
 
 @media (max-width:968px){
   .nav-links{ display:none; position:absolute; top:100%; left:0; width:100%; background:rgba(5,5,5,.97); flex-direction:column; padding:1.5rem var(--pad-x); gap:1.3rem; border-top:1px solid var(--border); }
@@ -197,6 +192,7 @@ footer{ background:#020202; padding:clamp(3rem,7vw,5rem) var(--pad-x) 2rem; bord
 @media (prefers-reduced-motion:reduce){
   *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
   .rv,.rv-l,.rv-r,.rv-z,.cascade > *{ opacity:1 !important; transform:none !important; }
+  .wa-float{ animation:none !important; }
 }
 </style>
 </head>
@@ -230,7 +226,7 @@ footer{ background:#020202; padding:clamp(3rem,7vw,5rem) var(--pad-x) 2rem; bord
     <p class="hero-text" data-fr="L'excellence culinaire rencontre la tradition. Découvrez nos plats signature, nos bâtons de manioc authentiques et nos services sur mesure." data-en="Culinary excellence meets tradition. Discover our signature dishes, authentic cassava sticks and tailor-made services.">L'excellence culinaire rencontre la tradition. Découvrez nos plats signature, nos bâtons de manioc authentiques et nos services sur mesure.</p>
     <div class="hero-buttons">
       <a href="carte.html" class="btn-glass accent" data-fr="Voir la Carte" data-en="View Menu">Voir la Carte</a>
-      <a href="#manioc" class="btn-glass" data-fr="Commander" data-en="Order Cassava">Commander</a>
+      <a href="#manioc" class="btn-glass" data-fr="Commander du Manioc" data-en="Order Cassava">Commander du Manioc</a>
     </div>
   </div>
 </section>
@@ -312,64 +308,35 @@ footer{ background:#020202; padding:clamp(3rem,7vw,5rem) var(--pad-x) 2rem; bord
     <h2 class="section-title" data-fr="Réservation & Commande" data-en="Booking & Order">Réservation & Commande</h2>
   </div>
   <form class="reservation-form rv" action="https://formsubmit.co/joplyfoods@gmail.com" method="POST">
-  <input type="hidden" name="_subject" value="Nouvelle réservation / commande - Joply Food">
-  <input type="hidden" name="_template" value="table">
-  <input type="hidden" name="_captcha" value="false">
-
-  <div class="form-group"><input type="text" name="Nom" placeholder="Votre Nom" data-fr-ph="Votre Nom" data-en-ph="Your Name" required></div>
-  <div class="form-group"><input type="email" name="Email" placeholder="Adresse Email" data-fr-ph="Adresse Email" data-en-ph="Email Address" required></div>
-  <div class="form-group"><input type="tel" name="Telephone" placeholder="Téléphone" data-fr-ph="Téléphone" data-en-ph="Phone" required></div>
-  <div class="form-group">
-    <select name="Service" required>
-      <option value="" data-fr="Type de service souhaité" data-en="Type of service">Type de service souhaité</option>
-      <option value="Chef à Domicile" data-fr="Chef à Domicile" data-en="Private Chef">Chef à Domicile</option>
-      <option value="Traiteur" data-fr="Traiteur" data-en="Catering">Traiteur</option>
-      <option value="Fairs & Festivals" data-fr="Fairs & Festivals" data-en="Fairs & Festivals">Fairs & Festivals</option>
-      <option value="Outdoor Events Vendors" data-fr="Outdoor Events Vendors" data-en="Outdoor Events Vendors">Outdoor Events Vendors</option>
-      <option value="Commande Bâtons de Manioc" data-fr="Commande Bâtons de Manioc" data-en="Cassava Sticks Order">Commande Bâtons de Manioc</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <select name="Evenement">
-      <option value="" data-fr="Type d'événement" data-en="Type of event">Type d'événement</option>
-      <option value="Mariage" data-fr="Mariage" data-en="Wedding">Mariage</option>
-      <option value="Anniversaire" data-fr="Anniversaire" data-en="Birthday">Anniversaire</option>
-      <option value="Séminaire / Entreprise" data-fr="Séminaire / Entreprise" data-en="Seminar / Company">Séminaire / Entreprise</option>
-      <option value="Festival / Foire" data-fr="Festival / Foire" data-en="Festival / Fair">Festival / Foire</option>
-      <option value="Réception privée" data-fr="Réception privée" data-en="Private reception">Réception privée</option>
-      <option value="Autre" data-fr="Autre" data-en="Other">Autre</option>
-    </select>
-  </div>
-  <div class="form-group"><input type="date" name="Date"></div>
-  <div class="form-group full-width"><textarea name="Message" placeholder="Décrivez le repas ou le service souhaité (plats, quantité, convives, préférences...)" data-fr-ph="Décrivez le repas ou le service souhaité (plats, quantité, convives, préférences...)" data-en-ph="Describe the meal or service you want (dishes, quantity, guests, preferences...)"></textarea></div>
-  <div class="form-submit"><button type="submit" class="btn-glass accent" data-fr="Envoyer ma Demande" data-en="Send my Request">Envoyer ma Demande</button></div>
-</form>
-    <div class="form-group"><input type="text" placeholder="Votre Nom" data-fr-ph="Votre Nom" data-en-ph="Your Name" required></div>
-    <div class="form-group"><input type="email" placeholder="Adresse Email" data-fr-ph="Adresse Email" data-en-ph="Email Address" required></div>
-    <div class="form-group"><input type="tel" placeholder="Téléphone" data-fr-ph="Téléphone" data-en-ph="Phone" required></div>
+    <input type="hidden" name="_subject" value="Nouvelle réservation / commande - Joply Food">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_captcha" value="false">
+    <div class="form-group"><input type="text" name="Nom" placeholder="Votre Nom" data-fr-ph="Votre Nom" data-en-ph="Your Name" required></div>
+    <div class="form-group"><input type="email" name="Email" placeholder="Adresse Email" data-fr-ph="Adresse Email" data-en-ph="Email Address" required></div>
+    <div class="form-group"><input type="tel" name="Telephone" placeholder="Téléphone" data-fr-ph="Téléphone" data-en-ph="Phone" required></div>
     <div class="form-group">
-      <select required>
+      <select name="Service" required>
         <option value="" data-fr="Type de service souhaité" data-en="Type of service">Type de service souhaité</option>
-        <option value="chef" data-fr="Chef à Domicile" data-en="Private Chef">Chef à Domicile</option>
-        <option value="traiteur" data-fr="Traiteur" data-en="Catering">Traiteur</option>
-        <option value="fairs" data-fr="Fairs & Festivals" data-en="Fairs & Festivals">Fairs & Festivals</option>
-        <option value="outdoor" data-fr="Outdoor Events Vendors" data-en="Outdoor Events Vendors">Outdoor Events Vendors</option>
-        <option value="manioc" data-fr="Commande Bâtons de Manioc" data-en="Cassava Sticks Order">Commande Bâtons de Manioc</option>
+        <option value="Chef à Domicile" data-fr="Chef à Domicile" data-en="Private Chef">Chef à Domicile</option>
+        <option value="Traiteur" data-fr="Traiteur" data-en="Catering">Traiteur</option>
+        <option value="Fairs & Festivals" data-fr="Fairs & Festivals" data-en="Fairs & Festivals">Fairs & Festivals</option>
+        <option value="Outdoor Events Vendors" data-fr="Outdoor Events Vendors" data-en="Outdoor Events Vendors">Outdoor Events Vendors</option>
+        <option value="Commande Bâtons de Manioc" data-fr="Commande Bâtons de Manioc" data-en="Cassava Sticks Order">Commande Bâtons de Manioc</option>
       </select>
     </div>
     <div class="form-group">
-      <select>
+      <select name="Evenement">
         <option value="" data-fr="Type d'événement" data-en="Type of event">Type d'événement</option>
-        <option value="mariage" data-fr="Mariage" data-en="Wedding">Mariage</option>
-        <option value="anniversaire" data-fr="Anniversaire" data-en="Birthday">Anniversaire</option>
-        <option value="seminaire" data-fr="Séminaire / Entreprise" data-en="Seminar / Company">Séminaire / Entreprise</option>
-        <option value="festival" data-fr="Festival / Foire" data-en="Festival / Fair">Festival / Foire</option>
-        <option value="prive" data-fr="Réception privée" data-en="Private reception">Réception privée</option>
-        <option value="autre" data-fr="Autre" data-en="Other">Autre</option>
+        <option value="Mariage" data-fr="Mariage" data-en="Wedding">Mariage</option>
+        <option value="Anniversaire" data-fr="Anniversaire" data-en="Birthday">Anniversaire</option>
+        <option value="Séminaire / Entreprise" data-fr="Séminaire / Entreprise" data-en="Seminar / Company">Séminaire / Entreprise</option>
+        <option value="Festival / Foire" data-fr="Festival / Foire" data-en="Festival / Fair">Festival / Foire</option>
+        <option value="Réception privée" data-fr="Réception privée" data-en="Private reception">Réception privée</option>
+        <option value="Autre" data-fr="Autre" data-en="Other">Autre</option>
       </select>
     </div>
-    <div class="form-group"><input type="date"></div>
-    <div class="form-group full-width"><textarea placeholder="Décrivez le repas ou le service souhaité (plats, quantité, convives, préférences...)" data-fr-ph="Décrivez le repas ou le service souhaité (plats, quantité, convives, préférences...)" data-en-ph="Describe the meal or service you want (dishes, quantity, guests, preferences...)"></textarea></div>
+    <div class="form-group"><input type="date" name="Date"></div>
+    <div class="form-group full-width"><textarea name="Message" placeholder="Décrivez le repas ou le service souhaité (plats, quantité, convives, préférences...)" data-fr-ph="Décrivez le repas ou le service souhaité (plats, quantité, convives, préférences...)" data-en-ph="Describe the meal or service you want (dishes, quantity, guests, preferences...)"></textarea></div>
     <div class="form-submit"><button type="submit" class="btn-glass accent" data-fr="Envoyer ma Demande" data-en="Send my Request">Envoyer ma Demande</button></div>
   </form>
 </section>
@@ -390,13 +357,12 @@ footer{ background:#020202; padding:clamp(3rem,7vw,5rem) var(--pad-x) 2rem; bord
         <li><a href="carte.html" data-fr="Notre Carte" data-en="Our Menu">Notre Carte</a></li>
       </ul>
     </div>
-   <div class="footer-column">
-  <h4 data-fr="Contact" data-en="Contact">Contact</h4>
-  <ul>
-    <li><a href="mailto:joplyfoods@gmail.com">joplyfoods@gmail.com</a></li>
-    <li><a href="tel:+16132967951">+1 (613) 296-7951</a></li>
-  </ul>
-</div>
+    <div class="footer-column">
+      <h4 data-fr="Contact" data-en="Contact">Contact</h4>
+      <ul>
+        <li><a href="mailto:joplyfoods@gmail.com">joplyfoods@gmail.com</a></li>
+        <li><a href="tel:+16132967951">+1 (613) 296-7951</a></li>
+      </ul>
     </div>
     <div class="footer-column">
       <h4 data-fr="Légal" data-en="Legal">Légal</h4>
@@ -406,9 +372,10 @@ footer{ background:#020202; padding:clamp(3rem,7vw,5rem) var(--pad-x) 2rem; bord
   <div class="footer-bottom"><p data-fr="© 2026 Joply Food. Tous droits réservés." data-en="© 2026 Joply Food. All rights reserved.">© 2026 Joply Food. Tous droits réservés.</p></div>
 </footer>
 
+<a class="wa-float" href="https://wa.me/16132967951?text=Bonjour%20%2F%20Hello%20Joply%20Food%2C%20je%20souhaite%20commander%20%2F%20I%20would%20like%20to%20order." target="_blank" rel="noopener" aria-label="WhatsApp" title="Commander sur WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+
 <button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="top"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
-<!-- SCRIPT D'ANIMATION : blindé (ne peut plus casser l'affichage) -->
 <script>
 (function(){
   function initCarousels(sel,interval){
@@ -440,13 +407,18 @@ footer{ background:#020202; padding:clamp(3rem,7vw,5rem) var(--pad-x) 2rem; bord
 
     document.querySelectorAll('a[href^="#"]').forEach(function(a){ a.addEventListener('click',function(e){ var id=this.getAttribute('href'); if(!id||id.length<2)return; var t=document.querySelector(id); if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); var nl=document.getElementById('navLinks'); if(nl) nl.classList.remove('active'); } }); });
 
+    var revealed=0;
+    function reveal(el){ if(el && !el.classList.contains('in')){ el.classList.add('in'); revealed++; } }
+    var animEls=document.querySelectorAll('.rv,.rv-l,.rv-r,.rv-z,.cascade > *');
+
     try{
       if('IntersectionObserver' in window){
-        var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
-        document.querySelectorAll('.rv,.rv-l,.rv-r,.rv-z,.cascade').forEach(function(el){ io.observe(el); });
-        var co=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ animateCounter(e.target); co.unobserve(e.target); } }); },{threshold:.6});
+        var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ reveal(e.target); io.unobserve(e.target); } }); },{threshold:0, rootMargin:'0px 0px -5% 0px'});
+        animEls.forEach(function(el){ io.observe(el); });
+        var co=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ animateCounter(e.target); co.unobserve(e.target); } }); },{threshold:.4});
         document.querySelectorAll('.counter').forEach(function(el){ co.observe(el); });
-        window.__revealOK=true; /* signale au parachute que tout va bien */
+        setTimeout(function(){ var vh=window.innerHeight||document.documentElement.clientHeight; animEls.forEach(function(el){ var r=el.getBoundingClientRect(); if(r.top<vh && r.bottom>0) reveal(el); }); },120);
+        setTimeout(function(){ if(revealed===0) revealAll(); },3000);
       }else{ revealAll(); }
     }catch(e){ revealAll(); }
   }
