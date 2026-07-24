@@ -69,6 +69,7 @@ nav.scrolled{ background:rgba(0,0,0,.55); backdrop-filter:blur(14px); -webkit-ba
 .btn-glass.accent{ background:rgba(181,101,29,.22); border-color:rgba(181,101,29,.55); color:var(--accent-2); }
 .btn-glass.accent:hover{ background:var(--accent); color:#fff; }
 
+/* HERO carte : 5 images plein écran + zoom */
 .carte-top{ position:relative; overflow:hidden; background:#000; }
 .carte-bg-carousel{ --dur:5s; position:absolute; inset:0; z-index:0; }
 .carte-bg-carousel .carousel-slide{ object-fit:cover; }
@@ -85,15 +86,29 @@ section{ padding:var(--gap-y) 0; }
 .white-section{ background:#fff; }
 .white-section .section-title{ color:#1a1a1a; }
 
-.stair-track{ display:flex; gap:clamp(1.2rem,3vw,2rem); overflow-x:auto; align-items:flex-start; padding:1rem var(--pad-x) clamp(2rem,5vw,4rem); scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch; }
-.stair-track::-webkit-scrollbar{ height:10px; }
-.stair-track::-webkit-scrollbar-track{ background:#efe7da; border-radius:10px; }
-.stair-track::-webkit-scrollbar-thumb{ background:var(--accent); border-radius:10px; }
-.stair-card{ flex:0 0 clamp(260px,80vw,340px); scroll-snap-align:start; background:#fff; border:1px solid #e6ded2; border-radius:16px; overflow:hidden; transition:box-shadow .4s,border-color .4s; box-shadow:0 10px 30px rgba(0,0,0,.08); display:flex; flex-direction:column; }
-.stair-card:hover{ border-color:var(--accent); box-shadow:0 22px 50px rgba(0,0,0,.18); }
-.stair-card:nth-child(1){margin-top:0}.stair-card:nth-child(2){margin-top:45px}.stair-card:nth-child(3){margin-top:90px}.stair-card:nth-child(4){margin-top:135px}.stair-card:nth-child(5){margin-top:180px}.stair-card:nth-child(6){margin-top:225px}.stair-card:nth-child(7){margin-top:270px}.stair-card:nth-child(8){margin-top:315px}.stair-card:nth-child(9){margin-top:360px}
+/* === GRILLE VERTICALE (1 col mobile / 2 tablette / 3 desktop) — plus d'escalier, plus de scroll horizontal === */
+.stair-track{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));
+  gap:clamp(1.4rem,3vw,2.2rem);
+  align-items:start;                 /* hauteurs naturelles => rythme vertical, pas de vignettes identiques */
+  padding:1rem var(--pad-x) clamp(2rem,5vw,4rem);
+  max-width:1300px;
+  margin:0 auto;
+}
+.stair-card{
+  background:#fff;
+  border:1px solid #e6ded2;
+  border-radius:16px;
+  overflow:hidden;
+  transition:box-shadow .4s,border-color .4s,transform .4s;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+  display:flex;
+  flex-direction:column;
+}
+.stair-card:hover{ border-color:var(--accent); box-shadow:0 22px 50px rgba(0,0,0,.18); transform:translateY(-6px); }
 
-.card-media{ position:relative; height:clamp(200px,55vw,240px); overflow:hidden; background:#f1ebe1; display:flex; align-items:center; justify-content:center; }
+.card-media{ position:relative; height:clamp(200px,52vw,250px); overflow:hidden; background:#f1ebe1; display:flex; align-items:center; justify-content:center; }
 .menu-img{ width:100%; height:100%; object-fit:contain; transition:transform .6s; }
 .stair-card:hover .menu-img{ transform:scale(1.05); }
 .menu-carousel{ --dur:6s; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
@@ -138,7 +153,7 @@ footer a.back-home{ color:var(--accent); text-decoration:none; font-weight:800; 
 .cascade > *{ opacity:0; transform:translateY(50px); }
 .cascade.in > *{ animation:cascadeIn .7s cubic-bezier(.22,.61,.36,1) both; }
 @keyframes cascadeIn{ from{opacity:0;transform:translateY(50px);} to{opacity:1;transform:none;} }
-.cascade.in > *:nth-child(1){animation-delay:.05s}.cascade.in > *:nth-child(2){animation-delay:.11s}.cascade.in > *:nth-child(3){animation-delay:.17s}.cascade.in > *:nth-child(4){animation-delay:.23s}.cascade.in > *:nth-child(5){animation-delay:.29s}.cascade.in > *:nth-child(6){animation-delay:.35s}.cascade.in > *:nth-child(7){animation-delay:.41s}.cascade.in > *:nth-child(8){animation-delay:.47s}.cascade.in > *:nth-child(9){animation-delay:.53s}
+.cascade.in > *:nth-child(1){animation-delay:.05s}.cascade.in > *:nth-child(2){animation-delay:.1s}.cascade.in > *:nth-child(3){animation-delay:.15s}.cascade.in > *:nth-child(4){animation-delay:.2s}.cascade.in > *:nth-child(5){animation-delay:.25s}.cascade.in > *:nth-child(6){animation-delay:.3s}.cascade.in > *:nth-child(7){animation-delay:.35s}.cascade.in > *:nth-child(8){animation-delay:.4s}.cascade.in > *:nth-child(9){animation-delay:.45s}
 .reveal-fallback .rv,.reveal-fallback .rv-z{ opacity:1!important; transform:none!important; }
 .reveal-fallback .cascade > *{ opacity:1!important; transform:none!important; }
 
@@ -147,8 +162,6 @@ footer a.back-home{ color:var(--accent); text-decoration:none; font-weight:800; 
   .nav-links.active{ display:flex; }
   .mobile-menu{ display:flex; }
   .order-form{ grid-template-columns:1fr; }
-  .stair-track{ flex-direction:column; overflow:visible; align-items:stretch; }
-  .stair-card{ flex:none; width:100%; margin-top:0 !important; }
 }
 @media (prefers-reduced-motion:reduce){
   *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
@@ -186,7 +199,7 @@ footer a.back-home{ color:var(--accent); text-decoration:none; font-weight:800; 
   </div>
   <header class="carte-hero">
     <h1 class="rv-z" data-fr="La Carte Joply Food" data-en="The Joply Food Menu">La Carte Joply Food</h1>
-    <p class="rv" data-fr="Parcourez nos plats signature et nos boissons maison. Chaque recette est préparée avec des ingrédients authentiques, dans le respect des traditions. Faites défiler horizontalement pour découvrir chaque spécialité." data-en="Browse our signature dishes and homemade drinks. Every recipe is prepared with authentic ingredients, respecting traditions. Scroll horizontally to discover each specialty.">Parcourez nos plats signature et nos boissons maison. Chaque recette est préparée avec des ingrédients authentiques, dans le respect des traditions. Faites défiler horizontalement pour découvrir chaque spécialité.</p>
+    <p class="rv" data-fr="Parcourez nos plats signature et nos boissons maison. Chaque recette est préparée avec des ingrédients authentiques, dans le respect des traditions." data-en="Browse our signature dishes and homemade drinks. Every recipe is prepared with authentic ingredients, respecting traditions.">Parcourez nos plats signature et nos boissons maison. Chaque recette est préparée avec des ingrédients authentiques, dans le respect des traditions.</p>
   </header>
 </div>
 
