@@ -1,0 +1,620 @@
+html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joply Food - Restaurant & Traiteur</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@600;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --color-bg: #050505;
+            --color-text: #ffffff;
+            --color-accent: #d4af37; /* Or plus brillant */
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        body { 
+            font-family: var(--font-body); 
+            background-color: var(--color-bg); 
+            color: var(--color-text); 
+            line-height: 1.6; 
+            overflow-x: hidden; 
+            font-weight: 600; /* Texte globalement gras */
+        }
+
+        h1, h2, h3, h4, p, a, li, span, button, input, select, textarea {
+            font-weight: 700 !important; /* Force le gras partout */
+        }
+
+        /* Navigation */
+        nav { 
+            position: fixed; top: 0; width: 100%; padding: 1.5rem 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; 
+            background: rgba(5, 5, 5, 0.7); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .logo { font-family: var(--font-heading); font-size: 2rem; font-weight: 900; color: var(--color-text); text-decoration: none; letter-spacing: 1px; text-transform: uppercase; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+        .nav-links a { color: var(--color-text); text-decoration: none; font-size: 0.9rem; font-weight: 800; letter-spacing: 1px; transition: color 0.3s ease; text-transform: uppercase; }
+        .nav-links a:hover { color: var(--color-accent); }
+        
+        /* Bouton Liquid Glass Style */
+        .btn-glass {
+            position: relative;
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: #fff;
+            display: inline-block;
+            font-weight: 800;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-glass::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+            transform: skewX(-25deg);
+        }
+
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .btn-glass:hover::before {
+            left: 100%;
+        }
+
+        .btn-glass.accent {
+            background: rgba(212, 175, 55, 0.15);
+            border-color: rgba(212, 175, 55, 0.4);
+            color: var(--color-accent);
+        }
+        .btn-glass.accent:hover {
+            background: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+            color: #fff;
+        }
+
+        .mobile-menu { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 1001; }
+        .mobile-menu span { width: 30px; height: 3px; background-color: var(--color-text); border-radius: 2px; }
+
+        /* Hero Section */
+        .hero { height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; }
+        .video-background { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); z-index: -2; object-fit: cover; }
+        .hero-fallback-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://images.unsplash.com/photo-1598103442097-8b74394b95c6?q=80&w=2574&auto=format&fit=crop'); background-size: cover; background-position: center; z-index: -3; }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.8)); z-index: -1; }
+        
+        .hero-content { position: relative; z-index: 1; max-width: 900px; padding: 0 2rem; animation: fadeInUp 1s ease-out; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-subtitle { font-family: var(--font-heading); font-size: 1.4rem; color: var(--color-accent); margin-bottom: 1rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
+        .hero-title { font-family: var(--font-heading); font-size: clamp(3.5rem, 9vw, 7rem); font-weight: 900; line-height: 1; margin-bottom: 1.5rem; color: #fff; text-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .hero-text { font-size: 1.2rem; color: #e0e0e0; max-width: 700px; margin: 0 auto 3rem; line-height: 1.8; font-weight: 700; opacity: 0.9; }
+        .hero-buttons { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+
+        /* Sections Générales */
+        section { padding: 8rem 5%; }
+        .section-header { text-align: center; margin-bottom: 5rem; }
+        .section-subtitle { font-family: var(--font-heading); color: var(--color-accent); font-size: 1.2rem; margin-bottom: 0.5rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 900; }
+        .section-title { font-family: var(--font-heading); font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; line-height: 1.1; color: #fff; }
+
+        /* Nouvelle Section: Bâtons de Manioc */
+        .manioc-section {
+            background: linear-gradient(135deg, #0a0a0a 0%, #151515 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .manioc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .manioc-image-container {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .manioc-image-container img {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.7s ease;
+        }
+
+        .manioc-image-container:hover img {
+            transform: scale(1.05);
+        }
+
+        .manioc-content h2 {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-accent);
+            font-weight: 900;
+        }
+
+        .manioc-desc {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: #ccc;
+            font-weight: 600;
+        }
+
+        .benefits-list {
+            list-style: none;
+            margin-bottom: 3rem;
+        }
+
+        .benefits-list li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.05rem;
+            color: #fff;
+        }
+
+        .benefits-list li::before {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background: var(--color-accent);
+            color: #000;
+            border-radius: 50%;
+            font-weight: 900;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .quantity-selector {
+            background: rgba(255,255,255,0.03);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .quantity-selector h4 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .qty-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .qty-btn {
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .qty-btn:hover, .qty-btn.active {
+            background: var(--color-accent);
+            color: #000;
+            border-color: var(--color-accent);
+            transform: translateY(-2px);
+        }
+
+        .qty-note {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #888;
+            font-style: italic;
+        }
+
+        /* Services Section */
+        .services { background-color: #080808; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+        .service-card { 
+            background: rgba(255,255,255,0.02); padding: 3rem 2rem; text-align: center; 
+            border: 1px solid rgba(255,255,255,0.05); transition: all 0.4s ease; border-radius: 10px;
+        }
+        .service-card:hover { transform: translateY(-10px); border-color: var(--color-accent); background: rgba(255,255,255,0.05); }
+        .service-icon { font-size: 3.5rem; margin-bottom: 1.5rem; display: inline-block; }
+        .service-card h3 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 1rem; color: #fff; font-weight: 900; }
+        .service-card p { color: #aaa; line-height: 1.7; margin-bottom: 2rem; font-size: 1rem; font-weight: 600; }
+
+        /* About Section */
+        .about { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; padding: 8rem 5%; background-color: var(--color-bg); }
+        .about-image { position: relative; overflow: hidden; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
+        .about-image img { width: 100%; height: 500px; object-fit: cover; filter: brightness(0.9); transition: transform 0.5s ease; }
+        .about-image:hover img { transform: scale(1.05); }
+        .about-content h2 { font-family: var(--font-heading); font-size: 3rem; margin-bottom: 1.5rem; line-height: 1.2; font-weight: 900; }
+        .about-content p { color: #bbb; margin-bottom: 1.5rem; font-size: 1.1rem; line-height: 1.8; font-weight: 600; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); }
+        .stat-item h4 { font-family: var(--font-heading); font-size: 2.5rem; color: var(--color-accent); margin-bottom: 0.2rem; font-weight: 900; }
+        .stat-item p { color: #888; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin: 0; font-weight: 800; }
+
+        /* Menu Section */
+        .menu { background-color: #0a0a0a; }
+        .menu-tabs { display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap; }
+        .menu-tab { 
+            padding: 1rem 2.5rem; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #888; cursor: pointer; 
+            font-family: var(--font-body); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; font-weight: 800;
+        }
+        .menu-tab.active, .menu-tab:hover { border-color: var(--color-accent); color: var(--color-accent); background: rgba(212, 175, 55, 0.1); }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto; }
+        .menu-item { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 1.5rem; border-bottom: 1px dashed rgba(255,255,255,0.1); transition: all 0.3s ease; }
+        .menu-item:hover { border-bottom-color: var(--color-accent); }
+        .menu-item-info h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.3rem; font-weight: 900; color: #fff; }
+        .menu-item-info p { color: #777; font-size: 0.95rem; line-height: 1.5; font-weight: 600; }
+        .menu-item-price { font-family: var(--font-heading); font-size: 1.5rem; color: var(--color-accent); font-weight: 900; white-space: nowrap; margin-left: 1.5rem; }
+
+        /* Catering Section */
+        .catering { background-color: #080808; text-align: center; padding: 8rem 5%; }
+        .catering-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 1200px; margin: 4rem auto 0; }
+        .catering-feature { padding: 2.5rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s ease; border-radius: 10px; }
+        .catering-feature:hover { transform: translateY(-5px); border-color: rgba(212, 175, 55, 0.3); background: rgba(255,255,255,0.04); }
+        .catering-feature-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .catering-feature h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.8rem; color: #fff; font-weight: 900; }
+        .catering-feature p { color: #888; font-size: 0.95rem; line-height: 1.6; font-weight: 600; }
+
+        /* Reservation Section */
+        .reservation { position: relative; padding: 8rem 5%; background-color: #000; background-image: url('https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1920&q=80'); background-size: cover; background-position: center; background-attachment: fixed; }
+        .reservation::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 1; }
+        .reservation .section-header, .reservation-form { position: relative; z-index: 2; }
+        .reservation-form { max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .form-group { position: relative; }
+        .form-group.full-width { grid-column: 1 / -1; }
+        .form-group input, .form-group select, .form-group textarea { 
+            width: 100%; padding: 1.2rem; background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
+            color: #fff; font-family: var(--font-body); font-size: 1rem; transition: all 0.3s ease; font-weight: 700; border-radius: 5px;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--color-accent); background-color: rgba(255,255,255,0.1); }
+        .form-group select option { background-color: #111; color: #fff; }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+        .form-submit { grid-column: 1 / -1; text-align: center; margin-top: 1rem; }
+
+        /* Footer */
+        footer { background-color: #020202; padding: 5rem 5% 2rem; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 4rem; }
+        .footer-brand p { color: #666; line-height: 1.8; margin: 1.5rem 0; font-size: 0.95rem; font-weight: 600; }
+        .social-links { display: flex; gap: 1rem; }
+        .social-links a { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; transition: all 0.3s ease; font-weight: 800; border-radius: 50%; }
+        .social-links a:hover { background-color: var(--color-accent); border-color: var(--color-accent); color: #000; }
+        .footer-column h4 { font-family: var(--font-heading); font-size: 1.2rem; margin-bottom: 1.5rem; color: #fff; font-weight: 900; }
+        .footer-column ul { list-style: none; }
+        .footer-column ul li { margin-bottom: 0.8rem; }
+        .footer-column ul li a { color: #666; text-decoration: none; transition: color 0.3s ease; font-size: 0.95rem; font-weight: 700; }
+        .footer-column ul li a:hover { color: var(--color-accent); }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.05); color: #444; font-size: 0.85rem; font-weight: 700; }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background-color: #050505; flex-direction: column; padding: 2rem; gap: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); }
+            .nav-links.active { display: flex; }
+            .mobile-menu { display: flex; }
+            .about, .manioc-grid { grid-template-columns: 1fr; }
+            .about-image, .manioc-image-container { order: -1; }
+            .stats { grid-template-columns: 1fr; text-align: center; }
+            .reservation-form { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+            .qty-options { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 640px) {
+            .hero-title { font-size: 3.5rem; }
+            .hero-buttons { flex-direction: column; align-items: stretch; }
+            .btn-glass { text-align: center; }
+            .footer-content { grid-template-columns: 1fr; }
+            .qty-options { grid-template-columns: 1fr; }
+        }
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="#" class="logo">Joply Food</a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home">Accueil</a></li>
+            <li><a href="#manioc">Bâtons de Manioc</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#catering">Traiteur</a></li>
+            <li><a href="#reservation" class="btn-glass accent" style="padding: 0.6rem 1.5rem; font-size: 0.8rem;">Réserver</a></li>
+        </ul>
+        <div class="mobile-menu" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-fallback-image"></div>
+        <video class="video-background" autoplay muted loop playsinline>
+            <source src="poulet.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <p class="hero-subtitle">Restaurant & Service Traiteur</p>
+            <h1 class="hero-title">Joply Food</h1>
+            <p class="hero-text">L'excellence culinaire rencontre la tradition. Découvrez nos plats signature et nos bâtons de manioc authentiques.</p>
+            <div class="hero-buttons">
+                <a href="#reservation" class="btn-glass accent">Réserver une Table</a>
+                <a href="#manioc" class="btn-glass">Commander du Manioc</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- NOUVELLE SECTION: BÂTONS DE MANIOC -->
+    <section class="manioc-section" id="manioc">
+        <div class="manioc-grid fade-in">
+            <div class="manioc-image-container">
+                <!-- Image illustrative de bâtons de manioc / feuilles -->
+                <img src="https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?q=80&w=1000&auto=format&fit=crop" alt="Bâtons de Manioc Traditionnels">
+            </div>
+            
+            <div class="manioc-content">
+                <p class="section-subtitle" style="text-align:left; margin-bottom:0.5rem;">Spécialité Camerounaise</p>
+                <h2>Bâtons de Manioc</h2>
+                <p class="manioc-desc">
+                    Une spécialité traditionnelle camerounaise d'exception. Faits de manioc fermenté sélectionné, enveloppés dans des feuilles végétales naturelles et cuits à la perfection. Un goût authentique qui transporte directement au cœur de l'Afrique Centrale.
+                </p>
+                
+                <ul class="benefits-list">
+                    <li>Riche en glucides complexes pour une énergie durable</li>
+                    <li>Sans gluten naturellement, idéal pour les régimes spéciaux</li>
+                    <li>Fermentation naturelle favorisant la digestion</li>
+                    <li>Source de fibres alimentaires essentielles</li>
+                    <li>Conservation naturelle grâce aux feuilles végétales</li>
+                </ul>
+
+                <div class="quantity-selector">
+                    <h4>Choisissez votre quantité</h4>
+                    <div class="qty-options">
+                        <button class="qty-btn" onclick="selectQty(this)">5 Bâtons</button>
+                        <button class="qty-btn" onclick="selectQty(this)">10 Bâtons</button>
+                        <button class="qty-btn" onclick="selectQty(this)">20 Bâtons</button>
+                        <button class="qty-btn" onclick="selectQty(this)">50 Bâtons</button>
+                        <button class="qty-btn" onclick="selectQty(this)">100 Bâtons</button>
+                        <button class="qty-btn" onclick="selectQty(this)">Sur Mesure</button>
+                    </div>
+                    <p class="qty-note">* Prix sur devis selon la quantité. Contactez-nous pour une commande personnalisée.</p>
+                    <div style="margin-top: 1.5rem; text-align: center;">
+                        <a href="#reservation" class="btn-glass accent">Demander un Devis</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-header fade-in">
+            <p class="section-subtitle">Nos Prestations</p>
+            <h2 class="section-title">Deux Univers, Une Passion</h2>
+        </div>
+        <div class="services-grid fade-in">
+            <div class="service-card">
+                <div class="service-icon">🍴</div>
+                <h3>Restaurant</h3>
+                <p>Vivez une expérience gastronomique unique dans un cadre élégant. Cuisine inventive valorisant les produits du terroir.</p>
+                <a href="#menu" class="btn-glass" style="padding: 0.8rem 2rem; font-size: 0.8rem;">Découvrir le Menu</a>
+            </div>
+            <div class="service-card">
+                <div class="service-icon"></div>
+                <h3>Traiteur Événementiel</h3>
+                <p>Mariages, séminaires, anniversaires... Menus sur mesure pour des événements inoubliables. Service complet A à Z.</p>
+                <a href="#catering" class="btn-glass" style="padding: 0.8rem 2rem; font-size: 0.8rem;">En savoir plus</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-content fade-in">
+            <h2>Notre Histoire</h2>
+            <p>Joply Food allie tradition culinaire africaine et créativité moderne. Notre engagement : vous offrir le meilleur de la gastronomie avec authenticité.</p>
+            <p>Chaque plat est préparé avec soin, amour et des produits sélectionnés auprès de producteurs locaux et importés directement d'Afrique.</p>
+            <div class="stats">
+                <div class="stat-item"><h4>15+</h4><p>Années d'expérience</p></div>
+                <div class="stat-item"><h4>500+</h4><p>Événements réussis</p></div>
+                <div class="stat-item"><h4>10k+</h4><p>Clients satisfaits</p></div>
+            </div>
+        </div>
+        <div class="about-image fade-in">
+            <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800" alt="Restaurant Interior">
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="menu" id="menu">
+        <div class="section-header fade-in">
+            <p class="section-subtitle">Découvrez</p>
+            <h2 class="section-title">Notre Carte</h2>
+        </div>
+        <div class="menu-tabs fade-in">
+            <button class="menu-tab active" onclick="filterMenu('entrees')">Entrées</button>
+            <button class="menu-tab" onclick="filterMenu('plats')">Plats</button>
+            <button class="menu-tab" onclick="filterMenu('desserts')">Desserts</button>
+        </div>
+        <div class="menu-grid fade-in" id="menuGrid">
+            <div class="menu-item" data-category="entrees"><div class="menu-item-info"><h3>Foie Gras Maison</h3><p>Chutney de figues, pain brioché toasté</p></div><div class="menu-item-price">24€</div></div>
+            <div class="menu-item" data-category="entrees"><div class="menu-item-info"><h3>Carpaccio de Saint-Jacques</h3><p>Agrumes, huile d'olive citronnée</p></div><div class="menu-item-price">22€</div></div>
+            <div class="menu-item" data-category="plats"><div class="menu-item-info"><h3>Poulet Rôti aux Herbes</h3><p>Jus truffé, légumes de saison rôtis</p></div><div class="menu-item-price">32€</div></div>
+            <div class="menu-item" data-category="plats"><div class="menu-item-info"><h3>Ndolé Royal</h3><p>Crevettes, viande de bœuf, bananes plantains</p></div><div class="menu-item-price">28€</div></div>
+            <div class="menu-item" data-category="desserts"><div class="menu-item-info"><h3>Tarte Tatin Revisitée</h3><p>Glace vanille de Madagascar</p></div><div class="menu-item-price">14€</div></div>
+            <div class="menu-item" data-category="desserts"><div class="menu-item-info"><h3>Beignets de Banane</h3><p>Sauce chocolat chaud maison</p></div><div class="menu-item-price">12€</div></div>
+        </div>
+    </section>
+
+    <!-- Catering Section -->
+    <section class="catering" id="catering">
+        <div class="section-header fade-in">
+            <p class="section-subtitle">Service Traiteur</p>
+            <h2 class="section-title">Sublimez Vos Événements</h2>
+        </div>
+        <div class="catering-content fade-in">
+            <p style="font-size: 1.1rem; color: #aaa; line-height: 1.8; margin-bottom: 2rem; font-weight: 600;">De l'intime au grand événement, nous créons des expériences culinaires sur mesure.</p>
+            <div class="catering-features">
+                <div class="catering-feature"><div class="catering-feature-icon">💍</div><h3>Mariages</h3><p>Menus personnalisés du vin d'honneur au dessert.</p></div>
+                <div class="catering-feature"><div class="catering-feature-icon">💼</div><h3>Séminaires</h3><p>Pauses café, déjeuners d'affaires, dîners de gala.</p></div>
+                <div class="catering-feature"><div class="catering-feature-icon">‍🍳</div><h3>Chef à Domicile</h3><p>Notre chef cuisine chez vous pour une expérience unique.</p></div>
+            </div>
+            <div style="margin-top: 4rem;"><a href="#reservation" class="btn-glass accent">Demander un Devis</a></div>
+        </div>
+    </section>
+
+    <!-- Reservation Section -->
+    <section class="reservation" id="reservation">
+        <div class="section-header fade-in">
+            <p class="section-subtitle">Contactez-nous</p>
+            <h2 class="section-title">Réservation & Devis</h2>
+        </div>
+        <form class="reservation-form fade-in" onsubmit="handleSubmit(event)">
+            <div class="form-group"><input type="text" placeholder="Votre Nom" required></div>
+            <div class="form-group"><input type="email" placeholder="Adresse Email" required></div>
+            <div class="form-group"><input type="tel" placeholder="Téléphone" required></div>
+            <div class="form-group">
+                <select required>
+                    <option value="">Type de prestation</option>
+                    <option value="restaurant">Réservation Restaurant</option>
+                    <option value="manioc">Commande Bâtons de Manioc</option>
+                    <option value="mariage">Mariage</option>
+                    <option value="seminaire">Séminaire</option>
+                </select>
+            </div>
+            <div class="form-group"><input type="date" required></div>
+            <div class="form-group">
+                <select>
+                    <option value="">Nombre de personnes / Quantité</option>
+                    <option value="1-5">1-5 personnes</option>
+                    <option value="20+">20+ personnes</option>
+                </select>
+            </div>
+            <div class="form-group full-width"><textarea placeholder="Votre Message (détails, préférences, quantité de manioc...)"></textarea></div>
+            <div class="form-submit"><button type="submit" class="btn-glass accent">Envoyer ma Demande</button></div>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="#" class="logo">Joply Food</a>
+                <p>Restaurant gastronomique et service traiteur d'exception. Spécialiste des bâtons de manioc traditionnels camerounais.</p>
+                <div class="social-links"><a href="#">FB</a><a href="#">IG</a><a href="#">YT</a></div>
+            </div>
+            <div class="footer-column">
+                <h4>Navigation</h4>
+                <ul><li><a href="#home">Accueil</a></li><li><a href="#manioc">Bâtons de Manioc</a></li><li><a href="#menu">Notre Menu</a></li><li><a href="#catering">Traiteur</a></li></ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact</h4>
+                <ul><li><a href="#">contact@joplyfood.fr</a></li><li><a href="#">01 23 45 67 89</a></li></ul>
+            </div>
+            <div class="footer-column">
+                <h4>Légal</h4>
+                <ul><li><a href="#">Mentions Légales</a></li><li><a href="#">CGV</a></li></ul>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2026 Joply Food. Tous droits réservés.</p></div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Menu filter
+        function filterMenu(category) {
+            const tabs = document.querySelectorAll('.menu-tab');
+            const items = document.querySelectorAll('.menu-item');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            items.forEach(item => {
+                if (category === 'all' || item.dataset.category === category) {
+                    item.style.display = 'flex';
+                    item.style.animation = 'fadeIn 0.5s ease forwards';
+                } else { item.style.display = 'none'; }
+            });
+        }
+
+        // Quantity selector for Manioc
+        function selectQty(btn) {
+            document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        // Form submission
+        function handleSubmit(e) {
+            e.preventDefault();
+            alert('Merci pour votre demande ! Nous vous recontacterons sous 24h.');
+            e.target.reset();
+            document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
+        }
+
+        // Mobile menu toggle
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Fade in animation on scroll
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, observerOptions);
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

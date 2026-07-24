@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notre Carte - Joply Food</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root{
+  --color-bg:#050505; --color-text:#ffffff; --color-muted:#b8b8b8;
+  --color-accent:#b5651d; --color-accent-2:#d99a5b; --color-accent-d:#8a4a12;
+  --border:rgba(255,255,255,0.1);
+  --font-heading:'Playfair Display',serif; --font-body:'Inter',sans-serif;
+}
+body{ font-family:var(--font-body); background:var(--color-bg); color:var(--color-text); line-height:1.6; overflow-x:hidden; font-weight:600; }
+h1,h2,h3,h4,p,a,li,span,button,input,select,textarea{ font-weight:700 !important; }
+
+nav{ position:fixed; top:0; width:100%; padding:1.2rem 5%; display:flex; justify-content:space-between; align-items:center; z-index:1000; background:rgba(0,0,0,0.12); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-bottom:1px solid rgba(255,255,255,0.05); transition:background .4s, backdrop-filter .4s; }
+nav.scrolled{ background:rgba(0,0,0,0.55); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); }
+.logo{ font-family:var(--font-heading); font-size:1.9rem; font-weight:900; color:#fff; text-decoration:none; letter-spacing:1px; text-transform:uppercase; text-shadow:0 2px 12px rgba(0,0,0,.85); }
+.nav-right{ display:flex; align-items:center; gap:1.8rem; }
+.nav-links{ display:flex; gap:1.8rem; list-style:none; align-items:center; }
+.nav-links a{ color:#fff; text-decoration:none; font-size:.88rem; font-weight:800; letter-spacing:1px; transition:color .3s; text-transform:uppercase; text-shadow:0 1px 10px rgba(0,0,0,.85); }
+.nav-links a:hover{ color:var(--color-accent); }
+.lang-switch{ display:flex; border:1px solid rgba(255,255,255,.25); border-radius:50px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.4); }
+.lang-btn{ background:transparent; border:none; padding:.4rem .8rem; font-size:.78rem; font-weight:800; cursor:pointer; color:#fff; letter-spacing:1px; text-shadow:0 1px 6px rgba(0,0,0,.7); }
+.lang-btn.active{ background:var(--color-accent); color:#fff; text-shadow:none; }
+.btn-glass{ position:relative; padding:1rem 2.5rem; text-decoration:none; font-size:.9rem; letter-spacing:2px; text-transform:uppercase; cursor:pointer; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.1); color:#fff; display:inline-block; font-weight:800; overflow:hidden; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); transition:all .4s; box-shadow:0 4px 20px rgba(0,0,0,.3), inset 0 0 0 1px rgba(255,255,255,0.12); border-radius:8px; }
+.btn-glass::before{ content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent); transition:.5s; transform:skewX(-25deg); }
+.btn-glass:hover{ background:rgba(255,255,255,0.18); border-color:rgba(255,255,255,0.55); transform:translateY(-3px); }
+.btn-glass:hover::before{ left:100%; }
+.btn-glass.accent{ background:rgba(181,101,29,.22); border-color:rgba(181,101,29,.55); color:var(--color-accent-2); }
+.btn-glass.accent:hover{ background:var(--color-accent); color:#fff; }
+.mobile-menu{ display:none; flex-direction:column; gap:6px; cursor:pointer; z-index:1001; }
+.mobile-menu span{ width:28px; height:3px; background:#fff; border-radius:2px; box-shadow:0 1px 6px rgba(0,0,0,.6); }
+
+/* HERO carte : fond animé 5 images ENTIÈRES (contain), sans voile */
+.carte-top{ position:relative; overflow:hidden; background:#000; }
+.carte-bg-carousel{ --dur:5s; position:absolute; inset:0; z-index:0; }
+
+.carte-hero{ position:relative; z-index:2; min-height:92vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:9rem 5% 4rem; }
+.carte-hero h1,.carte-hero p{ text-shadow:0 3px 24px rgba(0,0,0,.95),0 0 10px rgba(0,0,0,.8); }
+.carte-hero h1{ font-family:var(--font-heading); font-size:clamp(2.5rem,6vw,4.5rem); font-weight:900; margin:0 0 1.5rem; color:#fff; }
+.carte-hero p{ max-width:750px; color:#f2f2f2; font-size:1.1rem; line-height:1.8; }
+.carte-bg-carousel .carousel-slide{ object-fit:cover; }
+section{ padding:4rem 0; }
+.section-header{ text-align:center; margin-bottom:3rem; padding:0 5%; }
+.section-subtitle{ font-family:var(--font-heading); color:var(--color-accent); font-size:1.2rem; margin-bottom:.5rem; letter-spacing:3px; text-transform:uppercase; font-weight:900; }
+.section-title{ font-family:var(--font-heading); font-size:clamp(2rem,5vw,3.5rem); font-weight:900; color:#fff; }
+
+/* PLATS & BOISSONS = FOND BLANC */
+.white-section{ background:#ffffff; }
+.white-section .section-title{ color:#1a1a1a; }
+
+/* ESCALIER HORIZONTAL */
+.stair-track{ display:flex; gap:2rem; overflow-x:auto; align-items:flex-start; padding:1rem 5% 4rem; scroll-snap-type:x proximity; }
+.stair-track::-webkit-scrollbar{ height:10px; }
+.stair-track::-webkit-scrollbar-track{ background:#efe7da; border-radius:10px; }
+.stair-track::-webkit-scrollbar-thumb{ background:var(--color-accent); border-radius:10px; }
+.stair-card{ flex:0 0 340px; scroll-snap-align:start; background:#fff; border:1px solid #e6ded2; border-radius:16px; overflow:hidden; transition:box-shadow .4s, border-color .4s; box-shadow:0 10px 30px rgba(0,0,0,.08); display:flex; flex-direction:column; }
+.stair-card:hover{ border-color:var(--color-accent); box-shadow:0 22px 50px rgba(0,0,0,.18); }
+.stair-card:nth-child(1){ margin-top:0; }
+.stair-card:nth-child(2){ margin-top:45px; }
+.stair-card:nth-child(3){ margin-top:90px; }
+.stair-card:nth-child(4){ margin-top:135px; }
+.stair-card:nth-child(5){ margin-top:180px; }
+.stair-card:nth-child(6){ margin-top:225px; }
+.stair-card:nth-child(7){ margin-top:270px; }
+.stair-card:nth-child(8){ margin-top:315px; }
+.stair-card:nth-child(9){ margin-top:360px; }
+
+/* IMAGES ENTIÈRES (contain), non assombries */
+.card-media{ position:relative; height:240px; overflow:hidden; background:#f1ebe1; display:flex; align-items:center; justify-content:center; }
+.menu-img{ width:100%; height:100%; object-fit:contain; display:block; transition:transform .6s; }
+.stair-card:hover .menu-img{ transform:scale(1.05); }
+.menu-carousel{ --dur:6s; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.menu-carousel .carousel-slide{ object-fit:contain; }
+
+.card-body{ padding:1.5rem; display:flex; flex-direction:column; gap:.9rem; }
+.card-body h3{ font-family:var(--font-heading); font-size:1.4rem; color:#241710; font-weight:900; }
+.on-order{ display:inline-block; font-size:.72rem; letter-spacing:2px; text-transform:uppercase; color:var(--color-accent); border:1px solid rgba(181,101,29,.5); padding:.3rem .8rem; border-radius:50px; align-self:flex-start; }
+.info-block{ border-top:1px dashed #e0d6c6; padding-top:.8rem; }
+.info-block h4{ font-family:var(--font-heading); font-size:.95rem; color:var(--color-accent); margin-bottom:.3rem; text-transform:uppercase; letter-spacing:1px; }
+.info-block p{ color:#555; font-size:.88rem; line-height:1.55; font-weight:600; }
+
+.order-section{ position:relative; padding:6rem 5%; background:#000 url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=80') center/cover; }
+.order-section::before{ content:''; position:absolute; inset:0; background:rgba(0,0,0,0.86); z-index:1; }
+.order-section .section-header,.order-form{ position:relative; z-index:2; }
+.order-form{ max-width:800px; margin:0 auto; display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; }
+.form-group{ position:relative; }
+.form-group.full-width{ grid-column:1 / -1; }
+.form-group input,.form-group select,.form-group textarea{ width:100%; padding:1.2rem; background:rgba(255,255,255,0.06); border:1px solid var(--border); color:#fff; font-family:var(--font-body); font-size:1rem; transition:all .3s; font-weight:700; border-radius:5px; }
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{ outline:none; border-color:var(--color-accent); background:rgba(255,255,255,0.12); }
+.form-group select option{ background:#111; color:#fff; }
+.form-group textarea{ resize:vertical; min-height:150px; }
+.form-submit{ grid-column:1 / -1; text-align:center; margin-top:1rem; }
+
+footer{ background:#020202; padding:3rem 5% 2rem; border-top:1px solid rgba(255,255,255,0.05); text-align:center; }
+footer .logo{ display:inline-block; margin-bottom:1rem; }
+footer p{ color:#666; font-size:.85rem; }
+footer a.back-home{ color:var(--color-accent); text-decoration:none; font-weight:800; }
+
+/* CARROUSEL + ZOOM */
+.carousel-slide{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transform:scale(1.12); transition:opacity 1s ease-in-out; }
+.carousel-slide.active{ opacity:1; animation:kenburns var(--dur,6s) ease-out forwards; }
+@keyframes kenburns{ from{ transform:scale(1); } to{ transform:scale(1.08); } }
+
+/* SCROLL MOTION */
+.rv,.rv-l,.rv-r,.rv-z{ opacity:0; transition:opacity .9s cubic-bezier(.22,.61,.36,1), transform .9s cubic-bezier(.22,.61,.36,1); }
+.rv{ transform:translateY(55px); }
+.rv-l{ transform:translateX(-80px); }
+.rv-r{ transform:translateX(80px); }
+.rv-z{ transform:scale(.82); }
+.rv.in,.rv-l.in,.rv-r.in,.rv-z.in{ opacity:1; transform:none; }
+.cascade > *{ opacity:0; transform:translateY(50px); }
+.cascade.in > *{ animation:cascadeIn .7s cubic-bezier(.22,.61,.36,1) both; }
+@keyframes cascadeIn{ from{ opacity:0; transform:translateY(50px); } to{ opacity:1; transform:none; } }
+.cascade.in > *:nth-child(1){animation-delay:.05s}
+.cascade.in > *:nth-child(2){animation-delay:.11s}
+.cascade.in > *:nth-child(3){animation-delay:.17s}
+.cascade.in > *:nth-child(4){animation-delay:.23s}
+.cascade.in > *:nth-child(5){animation-delay:.29s}
+.cascade.in > *:nth-child(6){animation-delay:.35s}
+.cascade.in > *:nth-child(7){animation-delay:.41s}
+.cascade.in > *:nth-child(8){animation-delay:.47s}
+.cascade.in > *:nth-child(9){animation-delay:.53s}
+
+@media (max-width:968px){
+  .nav-links{ display:none; position:absolute; top:100%; left:0; width:100%; background:rgba(5,5,5,0.95); flex-direction:column; padding:2rem; gap:1.5rem; border-top:1px solid var(--border); }
+  .nav-links.active{ display:flex; }
+  .mobile-menu{ display:flex; }
+  .order-form{ grid-template-columns:1fr; }
+  .stair-track{ flex-direction:column; overflow:visible; align-items:stretch; padding:1rem 5% 2rem; }
+  .stair-card{ flex:none; width:100%; margin-top:0 !important; }
+  .card-media{ height:260px; }
+}
+@media (max-width:640px){ .btn-glass{ text-align:center; } }
+</style>
+</head>
+<body>
+<nav id="navbar">
+  <a href="index.html" class="logo">Joply Food</a>
+  <div class="nav-right">
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" data-fr="Accueil" data-en="Home">Accueil</a></li>
+      <li><a href="#plats" data-fr="Plats" data-en="Dishes">Plats</a></li>
+      <li><a href="#boissons" data-fr="Boissons" data-en="Drinks">Boissons</a></li>
+      <li><a href="#commander" class="btn-glass accent" style="padding:.6rem 1.4rem;font-size:.8rem;" data-fr="Commander" data-en="Order">Commander</a></li>
+    </ul>
+    <div class="lang-switch">
+      <button class="lang-btn active" data-lang="fr" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+    </div>
+    <div class="mobile-menu" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- HERO : fond animé limité au hero, images entières + zoom -->
+<div class="carte-top">
+  <div class="carte-bg-carousel">
+    <img src="carte1.jpg" alt="" class="carousel-slide active">
+    <img src="carte2.jpg" alt="" class="carousel-slide">
+    <img src="carte3.jpg" alt="" class="carousel-slide">
+    <img src="carte4.jpg" alt="" class="carousel-slide">
+    <img src="carte5.jpg" alt="" class="carousel-slide">
+  </div>
+  <header class="carte-hero">
+    <h1 class="rv-z" data-fr="La Carte Joply Food" data-en="The Joply Food Menu">La Carte Joply Food</h1>
+    <p class="rv" data-fr="Parcourez nos plats signature et nos boissons maison. Chaque recette est préparée avec des ingrédients authentiques, dans le respect des traditions. Faites défiler horizontalement pour découvrir chaque spécialité." data-en="Browse our signature dishes and homemade drinks. Every recipe is prepared with authentic ingredients, respecting traditions. Scroll horizontally to discover each specialty.">Parcourez nos plats signature et nos boissons maison. Chaque recette est préparée avec des ingrédients authentiques, dans le respect des traditions. Faites défiler horizontalement pour découvrir chaque spécialité.</p>
+  </header>
+</div>
+
+<!-- PLATS : fond blanc -->
+<section id="plats" class="white-section">
+  <div class="section-header rv">
+    <p class="section-subtitle" data-fr="À déguster" data-en="To enjoy">À déguster</p>
+    <h2 class="section-title" data-fr="Nos Plats" data-en="Our Dishes">Nos Plats</h2>
+  </div>
+  <div class="stair-track cascade">
+
+    <article class="stair-card">
+      <div class="card-media"><img src="grilled.jpg" alt="Grilled Chicken" class="menu-img"></div>
+      <div class="card-body">
+        <h3>Grilled Chicken</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span>
+        <div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Riche en protéines maigres, source de vitamines B et de sélénium pour l'énergie et l'immunité." data-en="Rich in lean protein, B vitamins and selenium for energy and immunity.">Riche en protéines maigres, source de vitamines B et de sélénium pour l'énergie et l'immunité.</p></div>
+        <div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Cuisson au feu qui préserve le jus, peau croustillante, convient à la plupart des régimes." data-en="Fire-roasting keeps it juicy with crispy skin, suits most diets.">Cuisson au feu qui préserve le jus, peau croustillante, convient à la plupart des régimes.</p></div>
+        <div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Le poulet grillé accompagne les fêtes d'Afrique de l'Ouest depuis des générations, cuit sur braises de bois." data-en="Grilled chicken has starred at West African gatherings for generations, cooked over wood embers.">Le poulet grillé accompagne les fêtes d'Afrique de l'Ouest depuis des générations, cuit sur braises de bois.</p></div>
+      </div>
+    </article>
+
+    <article class="stair-card">
+      <div class="card-media"><img src="puff.jpg" alt="Puff Puff and Beans" class="menu-img"></div>
+      <div class="card-body">
+        <h3>Puff Puff and Beans</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span>
+        <div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Les haricots apportent fibres et fer ; le puff puff donne une énergie rapide." data-en="Beans bring fiber and iron; puff puff gives quick energy.">Les haricots apportent fibres et fer ; le puff puff donne une énergie rapide.</p></div>
+        <div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Repas complet, économique, apprécié des enfants comme des adultes." data-en="A complete, affordable meal loved by kids and adults alike.">Repas complet, économique, apprécié des enfants comme des adultes.</p></div>
+        <div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Le puff puff, beignet levé, vient d'Afrique centrale ; servi avec haricots au Cameroun et au Nigeria." data-en="Puff puff, a risen doughnut, comes from Central Africa, served with beans in Cameroon and Nigeria.">Le puff puff, beignet levé, vient d'Afrique centrale ; servi avec haricots au Cameroun et au Nigeria.</p></div>
+      </div>
+    </article>
+
+    <article class="stair-card">
+      <div class="card-media"><img src="jollof.jpg" alt="Jollof Rice" class="menu-img"></div>
+      <div class="card-body">
+        <h3>Jollof Rice</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span>
+        <div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Riz assaisonné de tomates et épices, source de glucides et d'antioxydants comme le lycopène." data-en="Tomato-spiced rice providing carbs and antioxidants like lycopene.">Riz assaisonné de tomates et épices, source de glucides et d'antioxydants comme le lycopène.</p></div>
+        <div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Plat convivial en une seule marmite, personnalisable à l'infini pour les grands groupes." data-en="A crowd-pleasing one-pot dish, endlessly customizable for big groups.">Plat convivial en une seule marmite, personnalisable à l'infini pour les grands groupes.</p></div>
+        <div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Né chez les Wolof du Sénégal, le jollof s'est répandu dans toute l'Afrique de l'Ouest." data-en="Born among the Wolof of Senegal, jollof spread across West Africa.">Né chez les Wolof du Sénégal, le jollof s'est répandu dans toute l'Afrique de l'Ouest.</p></div>
+      </div>
+    </article>
+
+    <article class="stair-card">
+      <div class="card-media"><img src="fried.jpg" alt="Fried Plantains" class="menu-img"></div>
+      <div class="card-body">
+        <h3>Fried Plantains</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span>
+        <div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Riches en potassium, vitamine A et fibres, pour une énergie durable." data-en="Rich in potassium, vitamin A and fiber for lasting energy.">Riches en potassium, vitamine A et fibres, pour une énergie durable.</p></div>
+        <div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Accompagnement sucré-salé, rapide à préparer, naturellement sans gluten." data-en="A sweet-savory side, quick to make, naturally gluten-free.">Accompagnement sucré-salé, rapide à préparer, naturellement sans gluten.</p></div>
+        <div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="La banane plantain frite (dodo / alloco) est un classique des rues d'Afrique de l'Ouest." data-en="Fried plantain (dodo / alloco) is a West African street classic.">La banane plantain frite (dodo / alloco) est un classique des rues d'Afrique de l'Ouest.</p></div>
+      </div>
+    </article>
+
+    <article class="stair-card">
+      <div class="card-media"><img src="suya.jpg" alt="Suya Meat" class="menu-img"></div>
+      <div class="card-body">
+        <h3>Suya Meat</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span>
+        <div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Viande maigre grillée, riche en protéines et en épices aux propriétés anti-inflammatoires." data-en="Lean grilled meat, high in protein with anti-inflammatory spices.">Viande maigre grillée, riche en protéines et en épices aux propriétés anti-inflammatoires.</p></div>
+        <div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Saveur fumée unique, faible en glucides, idéal en brochettes." data-en="Unique smoky flavor, low carb, perfect on skewers.">Saveur fumée unique, faible en glucides, idéal en brochettes.</p></div>
+        <div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Le suya, bœuf épicé au yaji, vient du nord du Nigeria et du Hausaland." data-en="Suya, yaji-spiced beef, originates from northern Nigeria and Hausaland.">Le suya, bœuf épicé au yaji, vient du nord du Nigeria et du Hausaland.</p></div>
+      </div>
+    </article>
+
+    <article class="stair-card">
+      <div class="card-media"><img src="fries.jpg" alt="Fries" class="menu-img"></div>
+      <div class="card-body">
+        <h3>Fries</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span>
+        <div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Pommes de terre source de potassium et vitamine C, énergie rapide." data-en="Potatoes provide potassium and vitamin C for quick energy.">Pommes de terre source de potassium et vitamine C, énergie rapide.</p></div>
+        <div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Universellement appréciées, croustillantes, l'accompagnement parfait." data-en="Universally loved, crispy, the perfect side.">Universellement appréciées, croustillantes, l'accompagnement parfait.</p></div>
+        <div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Les frites, popularisées en Europe, sont devenues un incontournable mondial." data-en="Fries, popularized in Europe, became a global staple.">Les frites, popularisées en Europe, sont devenues un incontournable mondial.</p></div>
+      </div>
+    </article>
+
+    <article class="stair-card">
+      <div class="card-media"><img src="goat.jpg" alt="Goat Meat" class="menu-img"></div>
+      <div class="card-body">
+        <h3>Goat Meat</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span>
+        <div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Viande maigre riche en fer, zinc et protéines, faible en graisses saturées." data-en="Lean meat rich in iron, zinc and protein, low in saturated fat.">Viande maigre riche en fer, zinc et protéines, faible en graisses saturées.</p></div>
+        <div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Saveur prononcée, tendre en cuisson lente, très nourrissant." data-en="Bold flavor, tender when slow-cooked, very nourishing.">Saveur prononcée, tendre en cuisson lente, très nourrissant.</p></div>
+        <div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="La chèvre est l'une des premières viandes domestiquées, pilier des fêtes africaines." data-en="Goat is among the first domesticated meats, a pillar of African feasts.">La chèvre est l'une des premières viandes domestiquées, pilier des fêtes africaines.</p></div>
+      </div>
+    </article>
+
+    <article class="stair-card">
+      <div class="card-media">
+        <div class="menu-carousel">
+          <img src="bobolo1.jpg" alt="Bobolo 1" class="carousel-slide active">
+          <img src="bobolo2.jpg" alt="Bobolo 2" class="carousel-slide">
+        </div>
+      </div>
+      <div class="card-body">
+        <h3>Bobolo</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span>
+        <div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Manioc fermenté, facile à digérer, source d'énergie et de probiotiques naturels." data-en="Fermented cassava, easy to digest, a source of energy and natural probiotics.">Manioc fermenté, facile à digérer, source d'énergie et de probiotiques naturels.</p></div>
+        <div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Sans gluten, longue conservation, accompagnement traditionnel polyvalent." data-en="Gluten-free, long shelf life, a versatile traditional side.">Sans gluten, longue conservation, accompagnement traditionnel polyvalent.</p></div>
+        <div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Le bobolo (miondo) est une spécialité camerounaise de manioc fermenté en feuilles." data-en="Bobolo (miondo) is a Cameroonian specialty of fermented cassava in leaves.">Le bobolo (miondo) est une spécialité camerounaise de manioc fermenté en feuilles.</p></div>
+      </div>
+    </article>
+
+    <article class="stair-card">
+      <div class="card-media">
+        <div class="menu-carousel">
+          <img src="salad1.jpg" alt="Salad 1" class="carousel-slide active">
+          <img src="salad2.jpg" alt="Salad 2" class="carousel-slide">
+          <img src="salad3.jpg" alt="Salad 3" class="carousel-slide">
+        </div>
+      </div>
+      <div class="card-body">
+        <h3>Salad</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span>
+        <div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Légumes frais riches en vitamines, minéraux et antioxydants, favorisant l'hydratation." data-en="Fresh vegetables rich in vitamins, minerals and antioxidants, supporting hydration.">Légumes frais riches en vitamines, minéraux et antioxydants, favorisant l'hydratation.</p></div>
+        <div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Léger, coloré, équilibre les plats riches, entièrement personnalisable." data-en="Light, colorful, balances rich dishes, fully customizable.">Léger, coloré, équilibre les plats riches, entièrement personnalisable.</p></div>
+        <div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Les salades composées mêlent héritage local et fraîcheur maraîchère moderne." data-en="Composed salads blend local heritage with modern market freshness.">Les salades composées mêlent héritage local et fraîcheur maraîchère moderne.</p></div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- BOISSONS : fond blanc -->
+<section id="boissons" class="white-section">
+  <div class="section-header rv">
+    <p class="section-subtitle" data-fr="À boire" data-en="To drink">À boire</p>
+    <h2 class="section-title" data-fr="Nos Boissons" data-en="Our Drinks">Nos Boissons</h2>
+  </div>
+  <div class="stair-track cascade">
+
+    <article class="stair-card">
+      <div class="card-media">
+        <div class="menu-carousel">
+          <img src="bissap1.jpg" alt="Bissap 1" class="carousel-slide active">
+          <img src="bissap2.jpg" alt="Bissap 2" class="carousel-slide">
+          <img src="bissap3.jpg" alt="Bissap 3" class="carousel-slide">
+        </div>
+      </div>
+      <div class="card-body">
+        <h3>Bissap Hibiscus Juice</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span>
+        <div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Fleurs d'hibiscus riches en vitamine C et antioxydants, aide à réguler la tension." data-en="Hibiscus flowers rich in vitamin C and antioxidants, supports blood pressure.">Fleurs d'hibiscus riches en vitamine C et antioxydants, aide à réguler la tension.</p></div>
+        <div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Boisson rafraîchissante sans alcool, naturellement colorée, très désaltérante." data-en="Refreshing non-alcoholic drink, naturally colored, thirst-quenching.">Boisson rafraîchissante sans alcool, naturellement colorée, très désaltérante.</p></div>
+        <div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Le bissap, infusion d'hibiscus, est bu dans toute l'Afrique de l'Ouest depuis des siècles." data-en="Bissap, a hibiscus infusion, has been drunk across West Africa for centuries.">Le bissap, infusion d'hibiscus, est bu dans toute l'Afrique de l'Ouest depuis des siècles.</p></div>
+      </div>
+    </article>
+
+    <article class="stair-card">
+      <div class="card-media">
+        <div class="menu-carousel">
+          <img src="pineaple1.jpg" alt="Pineapple Ginger 1" class="carousel-slide active">
+          <img src="pineaple2.jpg" alt="Pineapple Ginger 2" class="carousel-slide">
+          <img src="pineaple3.jpg" alt="Pineapple Ginger 3" class="carousel-slide">
+        </div>
+      </div>
+      <div class="card-body">
+        <h3>Pineapple & Ginger Juice</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span>
+        <div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Ananas riche en bromélaïne et vitamine C ; gingembre anti-nausée et digestif." data-en="Pineapple rich in bromelain and vitamin C; ginger eases nausea and digestion.">Ananas riche en bromélaïne et vitamine C ; gingembre anti-nausée et digestif.</p></div>
+        <div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Piquant doux, tonifiant, excellent chaud ou froid." data-en="Mildly spicy, invigorating, great hot or cold.">Piquant doux, tonifiant, excellent chaud ou froid.</p></div>
+        <div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="L'alliance ananas-gingembre vient des remèdes tropicaux d'Afrique et des Caraïbes." data-en="The pineapple-ginger pairing stems from tropical remedies of Africa and the Caribbean.">L'alliance ananas-gingembre vient des remèdes tropicaux d'Afrique et des Caraïbes.</p></div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="order-section" id="commander">
+  <div class="section-header rv">
+    <p class="section-subtitle" data-fr="Passez commande" data-en="Place an order">Passez commande</p>
+    <h2 class="section-title" data-fr="Décrivez Votre Besoin" data-en="Describe Your Need">Décrivez Votre Besoin</h2>
+  </div>
+  <form class="order-form rv" onsubmit="handleSubmit(event)">
+    <div class="form-group"><input type="text" placeholder="Votre Nom" data-fr-ph="Votre Nom" data-en-ph="Your Name" required></div>
+    <div class="form-group"><input type="email" placeholder="Adresse Email" data-fr-ph="Adresse Email" data-en-ph="Email Address" required></div>
+    <div class="form-group"><input type="tel" placeholder="Téléphone" data-fr-ph="Téléphone" data-en-ph="Phone" required></div>
+    <div class="form-group"><input type="date"></div>
+    <div class="form-group">
+      <select required>
+        <option value="" data-fr="Type de service souhaité" data-en="Type of service">Type de service souhaité</option>
+        <option value="chef" data-fr="Chef à Domicile" data-en="Private Chef">Chef à Domicile</option>
+        <option value="traiteur" data-fr="Traiteur" data-en="Catering">Traiteur</option>
+        <option value="fairs" data-fr="Fairs & Festivals" data-en="Fairs & Festivals">Fairs & Festivals</option>
+        <option value="outdoor" data-fr="Outdoor Events Vendors" data-en="Outdoor Events Vendors">Outdoor Events Vendors</option>
+        <option value="commande" data-fr="Commande de plats / boissons" data-en="Dishes / drinks order">Commande de plats / boissons</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <select>
+        <option value="" data-fr="Type d'événement" data-en="Type of event">Type d'événement</option>
+        <option value="mariage" data-fr="Mariage" data-en="Wedding">Mariage</option>
+        <option value="anniversaire" data-fr="Anniversaire" data-en="Birthday">Anniversaire</option>
+        <option value="seminaire" data-fr="Séminaire / Entreprise" data-en="Seminar / Company">Séminaire / Entreprise</option>
+        <option value="festival" data-fr="Festival / Foire" data-en="Festival / Fair">Festival / Foire</option>
+        <option value="prive" data-fr="Réception privée" data-en="Private reception">Réception privée</option>
+        <option value="aucun" data-fr="Pas d'événement particulier" data-en="No specific event">Pas d'événement particulier</option>
+        <option value="autre" data-fr="Autre" data-en="Other">Autre</option>
+      </select>
+    </div>
+    <div class="form-group full-width"><textarea placeholder="Décrivez précisément ce que vous souhaitez : type de repas, plats désirés (ex: Jollof Rice, Suya Meat, Bissap...), quantité / nombre de convives, boissons, préférences..." data-fr-ph="Décrivez précisément ce que vous souhaitez : type de repas, plats désirés (ex: Jollof Rice, Suya Meat, Bissap...), quantité / nombre de convives, boissons, préférences..." data-en-ph="Describe precisely what you want: type of meal, desired dishes (e.g. Jollof Rice, Suya Meat, Bissap...), quantity / number of guests, drinks, preferences..." required></textarea></div>
+    <div class="form-submit"><button type="submit" class="btn-glass accent" data-fr="Envoyer ma Commande" data-en="Send my Order">Envoyer ma Commande</button></div>
+  </form>
+</section>
+
+<footer>
+  <a href="index.html" class="logo">Joply Food</a>
+  <p><a href="index.html" class="back-home" data-fr="← Retour à l'accueil" data-en="← Back to home">← Retour à l'accueil</a></p>
+  <p style="margin-top:1rem;" data-fr="© 2026 Joply Food. Tous droits réservés." data-en="© 2026 Joply Food. All rights reserved.">© 2026 Joply Food. Tous droits réservés.</p>
+</footer>
+
+<script>
+var currentLang='fr';
+function setLang(lang){
+  currentLang=lang;
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-fr]').forEach(function(el){ el.textContent=el.getAttribute('data-'+lang); });
+  document.querySelectorAll('[data-fr-ph]').forEach(function(el){ el.setAttribute('placeholder',el.getAttribute('data-'+lang+'-ph')); });
+  document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.toggle('active',b.dataset.lang===lang); });
+}
+function initCarousels(sel,interval){
+  document.querySelectorAll(sel).forEach(function(c){
+    var s=c.querySelectorAll('.carousel-slide'); if(s.length<2) return; var i=0;
+    setInterval(function(){ s[i].classList.remove('active'); i=(i+1)%s.length; s[i].classList.add('active'); },interval);
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  initCarousels('.carte-bg-carousel',5000);
+  initCarousels('.menu-carousel',6000);
+  setLang('fr');
+});
+window.addEventListener('scroll',function(){ var n=document.getElementById('navbar'); if(window.scrollY>50) n.classList.add('scrolled'); else n.classList.remove('scrolled'); });
+document.querySelectorAll('a[href^="#"]').forEach(function(a){ a.addEventListener('click',function(e){ e.preventDefault(); var t=document.querySelector(this.getAttribute('href')); if(t) t.scrollIntoView({behavior:'smooth',block:'start'}); }); });
+function handleSubmit(e){ e.preventDefault(); alert(currentLang==='fr'?'Merci ! Votre commande a bien été envoyée. Nous vous recontacterons sous 24h pour convenir du menu et du tarif.':'Thank you! Your order has been sent. We will contact you within 24h to agree on the menu and price.'); e.target.reset(); }
+function toggleMenu(){ document.getElementById('navLinks').classList.toggle('active'); }
+var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); },{threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.rv,.rv-l,.rv-r,.rv-z,.cascade').forEach(function(el){ io.observe(el); });
+</script>
+</body>
+</html>
