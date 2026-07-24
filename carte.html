@@ -7,6 +7,24 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<noscript><style>.rv,.rv-z{opacity:1!important;transform:none!important;}.cascade>*{opacity:1!important;transform:none!important;}</style></noscript>
+
+<script>
+window.currentLang='fr';
+window.setLang=function(lang){
+  try{
+    window.currentLang=lang; document.documentElement.lang=lang;
+    document.querySelectorAll('[data-fr]').forEach(function(el){ var v=el.getAttribute('data-'+lang); if(v!==null) el.textContent=v; });
+    document.querySelectorAll('[data-fr-ph]').forEach(function(el){ var v=el.getAttribute('data-'+lang+'-ph'); if(v!==null) el.setAttribute('placeholder',v); });
+    document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.toggle('active',b.dataset.lang===lang); });
+  }catch(e){}
+};
+window.toggleMenu=function(){ try{ var n=document.getElementById('navLinks'); if(n) n.classList.toggle('active'); }catch(e){} };
+window.handleSubmit=function(e){ try{ e.preventDefault(); alert(window.currentLang==='fr'?'Merci ! Votre commande a bien été envoyée. Nous vous recontacterons sous 24h pour convenir du menu et du tarif.':'Thank you! Your order has been sent. We will contact you within 24h to agree on the menu and price.'); e.target.reset(); }catch(err){} };
+window.addEventListener('load',function(){ setTimeout(function(){ if(!window.__revealOK){ document.documentElement.classList.add('reveal-fallback'); } },800); });
+</script>
+
 <style>
 *{ margin:0; padding:0; box-sizing:border-box; }
 html{ overflow-x:hidden; scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
@@ -51,7 +69,6 @@ nav.scrolled{ background:rgba(0,0,0,.55); backdrop-filter:blur(14px); -webkit-ba
 .btn-glass.accent{ background:rgba(181,101,29,.22); border-color:rgba(181,101,29,.55); color:var(--accent-2); }
 .btn-glass.accent:hover{ background:var(--accent); color:#fff; }
 
-/* HERO carte : 5 images plein écran (cover) + zoom */
 .carte-top{ position:relative; overflow:hidden; background:#000; }
 .carte-bg-carousel{ --dur:5s; position:absolute; inset:0; z-index:0; }
 .carte-bg-carousel .carousel-slide{ object-fit:cover; }
@@ -68,7 +85,6 @@ section{ padding:var(--gap-y) 0; }
 .white-section{ background:#fff; }
 .white-section .section-title{ color:#1a1a1a; }
 
-/* ESCALIER */
 .stair-track{ display:flex; gap:clamp(1.2rem,3vw,2rem); overflow-x:auto; align-items:flex-start; padding:1rem var(--pad-x) clamp(2rem,5vw,4rem); scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch; }
 .stair-track::-webkit-scrollbar{ height:10px; }
 .stair-track::-webkit-scrollbar-track{ background:#efe7da; border-radius:10px; }
@@ -116,20 +132,21 @@ footer a.back-home{ color:var(--accent); text-decoration:none; font-weight:800; 
 .carousel-slide.active{ opacity:1; animation:kenburns var(--dur,6s) ease-out forwards; }
 @keyframes kenburns{ from{transform:scale(1);} to{transform:scale(1.08);} }
 
-.rv,.rv-l,.rv-r,.rv-z{ opacity:0; transition:opacity .9s cubic-bezier(.22,.61,.36,1),transform .9s cubic-bezier(.22,.61,.36,1); }
+.rv,.rv-z{ opacity:0; transition:opacity .9s cubic-bezier(.22,.61,.36,1),transform .9s cubic-bezier(.22,.61,.36,1); }
 .rv{ transform:translateY(55px); } .rv-z{ transform:scale(.82); }
 .rv.in,.rv-z.in{ opacity:1; transform:none; }
 .cascade > *{ opacity:0; transform:translateY(50px); }
 .cascade.in > *{ animation:cascadeIn .7s cubic-bezier(.22,.61,.36,1) both; }
 @keyframes cascadeIn{ from{opacity:0;transform:translateY(50px);} to{opacity:1;transform:none;} }
 .cascade.in > *:nth-child(1){animation-delay:.05s}.cascade.in > *:nth-child(2){animation-delay:.11s}.cascade.in > *:nth-child(3){animation-delay:.17s}.cascade.in > *:nth-child(4){animation-delay:.23s}.cascade.in > *:nth-child(5){animation-delay:.29s}.cascade.in > *:nth-child(6){animation-delay:.35s}.cascade.in > *:nth-child(7){animation-delay:.41s}.cascade.in > *:nth-child(8){animation-delay:.47s}.cascade.in > *:nth-child(9){animation-delay:.53s}
+.reveal-fallback .rv,.reveal-fallback .rv-z{ opacity:1!important; transform:none!important; }
+.reveal-fallback .cascade > *{ opacity:1!important; transform:none!important; }
 
 @media (max-width:968px){
   .nav-links{ display:none; position:absolute; top:100%; left:0; width:100%; background:rgba(5,5,5,.97); flex-direction:column; padding:1.5rem var(--pad-x); gap:1.3rem; border-top:1px solid var(--border); }
   .nav-links.active{ display:flex; }
   .mobile-menu{ display:flex; }
   .order-form{ grid-template-columns:1fr; }
-  /* escalier -> colonne propre sur mobile */
   .stair-track{ flex-direction:column; overflow:visible; align-items:stretch; }
   .stair-card{ flex:none; width:100%; margin-top:0 !important; }
 }
@@ -179,19 +196,19 @@ footer a.back-home{ color:var(--accent); text-decoration:none; font-weight:800; 
     <h2 class="section-title" data-fr="Nos Plats" data-en="Our Dishes">Nos Plats</h2>
   </div>
   <div class="stair-track cascade">
-    <article class="stair-card"><div class="card-media"><img src="grilled.jpg" alt="Grilled Chicken" class="menu-img"></div><div class="card-body"><h3>Grilled Chicken</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span><div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Riche en protéines maigres, source de vitamines B et de sélénium pour l'énergie et l'immunité." data-en="Rich in lean protein, B vitamins and selenium for energy and immunity.">Riche en protéines maigres, source de vitamines B et de sélénium pour l'énergie et l'immunité.</p></div><div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Cuisson au feu qui préserve le jus, peau croustillante, convient à la plupart des régimes." data-en="Fire-roasting keeps it juicy with crispy skin, suits most diets.">Cuisson au feu qui préserve le jus, peau croustillante, convient à la plupart des régimes.</p></div><div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Le poulet grillé accompagne les fêtes d'Afrique de l'Ouest depuis des générations, cuit sur braises de bois." data-en="Grilled chicken has starred at West African gatherings for generations, cooked over wood embers.">Le poulet grillé accompagne les fêtes d'Afrique de l'Ouest depuis des générations, cuit sur braises de bois.</p></div></div></article>
+    <article class="stair-card"><div class="card-media"><img src="grilled.jpg" alt="Grilled Chicken" class="menu-img" loading="lazy" decoding="async"></div><div class="card-body"><h3>Grilled Chicken</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span><div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Riche en protéines maigres, source de vitamines B et de sélénium pour l'énergie et l'immunité." data-en="Rich in lean protein, B vitamins and selenium for energy and immunity.">Riche en protéines maigres, source de vitamines B et de sélénium pour l'énergie et l'immunité.</p></div><div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Cuisson au feu qui préserve le jus, peau croustillante, convient à la plupart des régimes." data-en="Fire-roasting keeps it juicy with crispy skin, suits most diets.">Cuisson au feu qui préserve le jus, peau croustillante, convient à la plupart des régimes.</p></div><div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Le poulet grillé accompagne les fêtes d'Afrique de l'Ouest depuis des générations, cuit sur braises de bois." data-en="Grilled chicken has starred at West African gatherings for generations, cooked over wood embers.">Le poulet grillé accompagne les fêtes d'Afrique de l'Ouest depuis des générations, cuit sur braises de bois.</p></div></div></article>
 
-    <article class="stair-card"><div class="card-media"><img src="puff.jpg" alt="Puff Puff and Beans" class="menu-img"></div><div class="card-body"><h3>Puff Puff and Beans</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span><div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Les haricots apportent fibres et fer ; le puff puff donne une énergie rapide." data-en="Beans bring fiber and iron; puff puff gives quick energy.">Les haricots apportent fibres et fer ; le puff puff donne une énergie rapide.</p></div><div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Repas complet, économique, apprécié des enfants comme des adultes." data-en="A complete, affordable meal loved by kids and adults alike.">Repas complet, économique, apprécié des enfants comme des adultes.</p></div><div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Le puff puff, beignet levé, vient d'Afrique centrale ; servi avec haricots au Cameroun et au Nigeria." data-en="Puff puff, a risen doughnut, comes from Central Africa, served with beans in Cameroon and Nigeria.">Le puff puff, beignet levé, vient d'Afrique centrale ; servi avec haricots au Cameroun et au Nigeria.</p></div></div></article>
+    <article class="stair-card"><div class="card-media"><img src="puff.jpg" alt="Puff Puff and Beans" class="menu-img" loading="lazy" decoding="async"></div><div class="card-body"><h3>Puff Puff and Beans</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span><div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Les haricots apportent fibres et fer ; le puff puff donne une énergie rapide." data-en="Beans bring fiber and iron; puff puff gives quick energy.">Les haricots apportent fibres et fer ; le puff puff donne une énergie rapide.</p></div><div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Repas complet, économique, apprécié des enfants comme des adultes." data-en="A complete, affordable meal loved by kids and adults alike.">Repas complet, économique, apprécié des enfants comme des adultes.</p></div><div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Le puff puff, beignet levé, vient d'Afrique centrale ; servi avec haricots au Cameroun et au Nigeria." data-en="Puff puff, a risen doughnut, comes from Central Africa, served with beans in Cameroon and Nigeria.">Le puff puff, beignet levé, vient d'Afrique centrale ; servi avec haricots au Cameroun et au Nigeria.</p></div></div></article>
 
-    <article class="stair-card"><div class="card-media"><img src="jollof.jpg" alt="Jollof Rice" class="menu-img"></div><div class="card-body"><h3>Jollof Rice</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span><div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Riz assaisonné de tomates et épices, source de glucides et d'antioxydants comme le lycopène." data-en="Tomato-spiced rice providing carbs and antioxidants like lycopene.">Riz assaisonné de tomates et épices, source de glucides et d'antioxydants comme le lycopène.</p></div><div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Plat convivial en une seule marmite, personnalisable à l'infini pour les grands groupes." data-en="A crowd-pleasing one-pot dish, endlessly customizable for big groups.">Plat convivial en une seule marmite, personnalisable à l'infini pour les grands groupes.</p></div><div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Né chez les Wolof du Sénégal, le jollof s'est répandu dans toute l'Afrique de l'Ouest." data-en="Born among the Wolof of Senegal, jollof spread across West Africa.">Né chez les Wolof du Sénégal, le jollof s'est répandu dans toute l'Afrique de l'Ouest.</p></div></div></article>
+    <article class="stair-card"><div class="card-media"><img src="jollof.jpg" alt="Jollof Rice" class="menu-img" loading="lazy" decoding="async"></div><div class="card-body"><h3>Jollof Rice</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span><div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Riz assaisonné de tomates et épices, source de glucides et d'antioxydants comme le lycopène." data-en="Tomato-spiced rice providing carbs and antioxidants like lycopene.">Riz assaisonné de tomates et épices, source de glucides et d'antioxydants comme le lycopène.</p></div><div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Plat convivial en une seule marmite, personnalisable à l'infini pour les grands groupes." data-en="A crowd-pleasing one-pot dish, endlessly customizable for big groups.">Plat convivial en une seule marmite, personnalisable à l'infini pour les grands groupes.</p></div><div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Né chez les Wolof du Sénégal, le jollof s'est répandu dans toute l'Afrique de l'Ouest." data-en="Born among the Wolof of Senegal, jollof spread across West Africa.">Né chez les Wolof du Sénégal, le jollof s'est répandu dans toute l'Afrique de l'Ouest.</p></div></div></article>
 
-    <article class="stair-card"><div class="card-media"><img src="fried.jpg" alt="Fried Plantains" class="menu-img"></div><div class="card-body"><h3>Fried Plantains</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span><div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Riches en potassium, vitamine A et fibres, pour une énergie durable." data-en="Rich in potassium, vitamin A and fiber for lasting energy.">Riches en potassium, vitamine A et fibres, pour une énergie durable.</p></div><div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Accompagnement sucré-salé, rapide à préparer, naturellement sans gluten." data-en="A sweet-savory side, quick to make, naturally gluten-free.">Accompagnement sucré-salé, rapide à préparer, naturellement sans gluten.</p></div><div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="La banane plantain frite (dodo / alloco) est un classique des rues d'Afrique de l'Ouest." data-en="Fried plantain (dodo / alloco) is a West African street classic.">La banane plantain frite (dodo / alloco) est un classique des rues d'Afrique de l'Ouest.</p></div></div></article>
+    <article class="stair-card"><div class="card-media"><img src="fried.jpg" alt="Fried Plantains" class="menu-img" loading="lazy" decoding="async"></div><div class="card-body"><h3>Fried Plantains</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span><div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Riches en potassium, vitamine A et fibres, pour une énergie durable." data-en="Rich in potassium, vitamin A and fiber for lasting energy.">Riches en potassium, vitamine A et fibres, pour une énergie durable.</p></div><div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Accompagnement sucré-salé, rapide à préparer, naturellement sans gluten." data-en="A sweet-savory side, quick to make, naturally gluten-free.">Accompagnement sucré-salé, rapide à préparer, naturellement sans gluten.</p></div><div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="La banane plantain frite (dodo / alloco) est un classique des rues d'Afrique de l'Ouest." data-en="Fried plantain (dodo / alloco) is a West African street classic.">La banane plantain frite (dodo / alloco) est un classique des rues d'Afrique de l'Ouest.</p></div></div></article>
 
-    <article class="stair-card"><div class="card-media"><img src="suya.jpg" alt="Suya Meat" class="menu-img"></div><div class="card-body"><h3>Suya Meat</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span><div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Viande maigre grillée, riche en protéines et en épices aux propriétés anti-inflammatoires." data-en="Lean grilled meat, high in protein with anti-inflammatory spices.">Viande maigre grillée, riche en protéines et en épices aux propriétés anti-inflammatoires.</p></div><div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Saveur fumée unique, faible en glucides, idéal en brochettes." data-en="Unique smoky flavor, low carb, perfect on skewers.">Saveur fumée unique, faible en glucides, idéal en brochettes.</p></div><div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Le suya, bœuf épicé au yaji, vient du nord du Nigeria et du Hausaland." data-en="Suya, yaji-spiced beef, originates from northern Nigeria and Hausaland.">Le suya, bœuf épicé au yaji, vient du nord du Nigeria et du Hausaland.</p></div></div></article>
+    <article class="stair-card"><div class="card-media"><img src="suya.jpg" alt="Suya Meat" class="menu-img" loading="lazy" decoding="async"></div><div class="card-body"><h3>Suya Meat</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span><div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Viande maigre grillée, riche en protéines et en épices aux propriétés anti-inflammatoires." data-en="Lean grilled meat, high in protein with anti-inflammatory spices.">Viande maigre grillée, riche en protéines et en épices aux propriétés anti-inflammatoires.</p></div><div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Saveur fumée unique, faible en glucides, idéal en brochettes." data-en="Unique smoky flavor, low carb, perfect on skewers.">Saveur fumée unique, faible en glucides, idéal en brochettes.</p></div><div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Le suya, bœuf épicé au yaji, vient du nord du Nigeria et du Hausaland." data-en="Suya, yaji-spiced beef, originates from northern Nigeria and Hausaland.">Le suya, bœuf épicé au yaji, vient du nord du Nigeria et du Hausaland.</p></div></div></article>
 
-    <article class="stair-card"><div class="card-media"><img src="fries.jpg" alt="Fries" class="menu-img"></div><div class="card-body"><h3>Fries</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span><div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Pommes de terre source de potassium et vitamine C, énergie rapide." data-en="Potatoes provide potassium and vitamin C for quick energy.">Pommes de terre source de potassium et vitamine C, énergie rapide.</p></div><div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Universellement appréciées, croustillantes, l'accompagnement parfait." data-en="Universally loved, crispy, the perfect side.">Universellement appréciées, croustillantes, l'accompagnement parfait.</p></div><div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Les frites, popularisées en Europe, sont devenues un incontournable mondial." data-en="Fries, popularized in Europe, became a global staple.">Les frites, popularisées en Europe, sont devenues un incontournable mondial.</p></div></div></article>
+    <article class="stair-card"><div class="card-media"><img src="fries.jpg" alt="Fries" class="menu-img" loading="lazy" decoding="async"></div><div class="card-body"><h3>Fries</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span><div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Pommes de terre source de potassium et vitamine C, énergie rapide." data-en="Potatoes provide potassium and vitamin C for quick energy.">Pommes de terre source de potassium et vitamine C, énergie rapide.</p></div><div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Universellement appréciées, croustillantes, l'accompagnement parfait." data-en="Universally loved, crispy, the perfect side.">Universellement appréciées, croustillantes, l'accompagnement parfait.</p></div><div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Les frites, popularisées en Europe, sont devenues un incontournable mondial." data-en="Fries, popularized in Europe, became a global staple.">Les frites, popularisées en Europe, sont devenues un incontournable mondial.</p></div></div></article>
 
-    <article class="stair-card"><div class="card-media"><img src="goat.jpg" alt="Goat Meat" class="menu-img"></div><div class="card-body"><h3>Goat Meat</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span><div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Viande maigre riche en fer, zinc et protéines, faible en graisses saturées." data-en="Lean meat rich in iron, zinc and protein, low in saturated fat.">Viande maigre riche en fer, zinc et protéines, faible en graisses saturées.</p></div><div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Saveur prononcée, tendre en cuisson lente, très nourrissant." data-en="Bold flavor, tender when slow-cooked, very nourishing.">Saveur prononcée, tendre en cuisson lente, très nourrissant.</p></div><div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="La chèvre est l'une des premières viandes domestiquées, pilier des fêtes africaines." data-en="Goat is among the first domesticated meats, a pillar of African feasts.">La chèvre est l'une des premières viandes domestiquées, pilier des fêtes africaines.</p></div></div></article>
+    <article class="stair-card"><div class="card-media"><img src="goat.jpg" alt="Goat Meat" class="menu-img" loading="lazy" decoding="async"></div><div class="card-body"><h3>Goat Meat</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span><div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Viande maigre riche en fer, zinc et protéines, faible en graisses saturées." data-en="Lean meat rich in iron, zinc and protein, low in saturated fat.">Viande maigre riche en fer, zinc et protéines, faible en graisses saturées.</p></div><div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Saveur prononcée, tendre en cuisson lente, très nourrissant." data-en="Bold flavor, tender when slow-cooked, very nourishing.">Saveur prononcée, tendre en cuisson lente, très nourrissant.</p></div><div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="La chèvre est l'une des premières viandes domestiquées, pilier des fêtes africaines." data-en="Goat is among the first domesticated meats, a pillar of African feasts.">La chèvre est l'une des premières viandes domestiquées, pilier des fêtes africaines.</p></div></div></article>
 
     <article class="stair-card"><div class="card-media"><div class="menu-carousel"><img src="bobolo1.jpg" alt="Bobolo 1" class="carousel-slide active"><img src="bobolo2.jpg" alt="Bobolo 2" class="carousel-slide"></div></div><div class="card-body"><h3>Bobolo</h3><span class="on-order" data-fr="Sur commande" data-en="On order">Sur commande</span><div class="info-block"><h4 data-fr="Bienfaits" data-en="Benefits">Bienfaits</h4><p data-fr="Manioc fermenté, facile à digérer, source d'énergie et de probiotiques naturels." data-en="Fermented cassava, easy to digest, a source of energy and natural probiotics.">Manioc fermenté, facile à digérer, source d'énergie et de probiotiques naturels.</p></div><div class="info-block"><h4 data-fr="Avantages" data-en="Advantages">Avantages</h4><p data-fr="Sans gluten, longue conservation, accompagnement traditionnel polyvalent." data-en="Gluten-free, long shelf life, a versatile traditional side.">Sans gluten, longue conservation, accompagnement traditionnel polyvalent.</p></div><div class="info-block"><h4 data-fr="Histoire" data-en="History">Histoire</h4><p data-fr="Le bobolo (miondo) est une spécialité camerounaise de manioc fermenté en feuilles." data-en="Bobolo (miondo) is a Cameroonian specialty of fermented cassava in leaves.">Le bobolo (miondo) est une spécialité camerounaise de manioc fermenté en feuilles.</p></div></div></article>
 
@@ -257,37 +274,42 @@ footer a.back-home{ color:var(--accent); text-decoration:none; font-weight:800; 
 <button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="top"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 <script>
-var currentLang='fr';
-function setLang(lang){
-  currentLang=lang; document.documentElement.lang=lang;
-  document.querySelectorAll('[data-fr]').forEach(function(el){ el.textContent=el.getAttribute('data-'+lang); });
-  document.querySelectorAll('[data-fr-ph]').forEach(function(el){ el.setAttribute('placeholder',el.getAttribute('data-'+lang+'-ph')); });
-  document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.toggle('active',b.dataset.lang===lang); });
-}
-function initCarousels(sel,interval){
-  document.querySelectorAll(sel).forEach(function(c){
-    var s=c.querySelectorAll('.carousel-slide'); if(s.length<2) return; var i=0;
-    setInterval(function(){ s[i].classList.remove('active'); i=(i+1)%s.length; s[i].classList.add('active'); },interval);
-  });
-}
-document.addEventListener('DOMContentLoaded',function(){ initCarousels('.carte-bg-carousel',5000); initCarousels('.menu-carousel',6000); setLang('fr'); });
+(function(){
+  function initCarousels(sel,interval){
+    document.querySelectorAll(sel).forEach(function(c){
+      var s=c.querySelectorAll('.carousel-slide'); if(s.length<2) return; var i=0;
+      setInterval(function(){ s[i].classList.remove('active'); i=(i+1)%s.length; s[i].classList.add('active'); },interval);
+    });
+  }
+  function revealAll(){ document.documentElement.classList.add('reveal-fallback'); }
 
-var nav=document.getElementById('navbar'), bar=document.getElementById('progressBar'), top=document.getElementById('toTop');
-function onScroll(){
-  var y=window.scrollY||document.documentElement.scrollTop;
-  nav.classList.toggle('scrolled',y>50);
-  top.classList.toggle('show',y>600);
-  var h=document.documentElement.scrollHeight-window.innerHeight;
-  bar.style.transform='scaleX('+(h>0?y/h:0)+')';
-}
-window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+  function boot(){
+    try{ initCarousels('.carte-bg-carousel',5000); initCarousels('.menu-carousel',6000); }catch(e){}
 
-document.querySelectorAll('a[href^="#"]').forEach(function(a){ a.addEventListener('click',function(e){ var id=this.getAttribute('href'); if(id.length<2)return; var t=document.querySelector(id); if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); document.getElementById('navLinks').classList.remove('active'); } }); });
-function handleSubmit(e){ e.preventDefault(); alert(currentLang==='fr'?'Merci ! Votre commande a bien été envoyée. Nous vous recontacterons sous 24h pour convenir du menu et du tarif.':'Thank you! Your order has been sent. We will contact you within 24h to agree on the menu and price.'); e.target.reset(); }
-function toggleMenu(){ document.getElementById('navLinks').classList.toggle('active'); }
+    var nav=document.getElementById('navbar'), bar=document.getElementById('progressBar'), topBtn=document.getElementById('toTop');
+    function onScroll(){
+      try{
+        var y=window.scrollY||document.documentElement.scrollTop;
+        if(nav) nav.classList.toggle('scrolled',y>50);
+        if(topBtn) topBtn.classList.toggle('show',y>600);
+        if(bar){ var h=document.documentElement.scrollHeight-window.innerHeight; bar.style.transform='scaleX('+(h>0?y/h:0)+')'; }
+      }catch(e){}
+    }
+    window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
 
-var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
-document.querySelectorAll('.rv,.rv-l,.rv-r,.rv-z,.cascade').forEach(function(el){ io.observe(el); });
+    document.querySelectorAll('a[href^="#"]').forEach(function(a){ a.addEventListener('click',function(e){ var id=this.getAttribute('href'); if(!id||id.length<2)return; var t=document.querySelector(id); if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); var nl=document.getElementById('navLinks'); if(nl) nl.classList.remove('active'); } }); });
+
+    try{
+      if('IntersectionObserver' in window){
+        var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+        document.querySelectorAll('.rv,.rv-z,.cascade').forEach(function(el){ io.observe(el); });
+        window.__revealOK=true;
+      }else{ revealAll(); }
+    }catch(e){ revealAll(); }
+  }
+
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',boot); }else{ boot(); }
+})();
 </script>
 </body>
 </html>
